@@ -1,0 +1,3 @@
+[submodule "3rdparty/JsPoker"]
+	path = 3rdparty/JsPoker
+	url = git@github.com:mdp/JsPoker.git
