@@ -78,7 +78,7 @@ module.exports = class
 
 		if round == 'pre-flop'
 			@state.playable = false
-			for range in @preflopRanges[currPos] when @inRange(hand, range, suits, @state.vals)
+			for range in @preflopRanges[currPos] when @inRange(range)
 				@state.playable = true
 				break
 		else
@@ -109,8 +109,10 @@ module.exports = class
 		else
 			@pos.mp
 
-	# Check whether a given hand is in the specified range.
-	inRange: (hand, range, suits, actualVals) ->
+	# Check whether the current hand is in the specified range.
+	inRange: (range) ->
+		{ suits, vals } = @state
+
 		# We don't care about the + suffix as it is decorative and implied. Only an 's' suffix
 		# vs. 'o' or missing suffix is meaningful.
 		suited = 's' in range[2...]
@@ -122,9 +124,9 @@ module.exports = class
 
 		pair = range[0] == range[1]
 		if pair
-			actual = actualVals[0]
+			actual = vals[0]
 			# Abort if input hand is not a pair.
-			return false if actual != actualVals[1]
+			return false if actual != vals[1]
 			# Value of expected pair.
 			expected = expectedVals[0]
 			return actual >= expected
@@ -132,7 +134,7 @@ module.exports = class
 		# Otherwise we simply need to check that we have a hand greater than or equal to
 		# expectation.
 
-		return actualVals[0] >= expectedVals[0] and actualVals[1] >= expectedVals[1]
+		return vals[0] >= expectedVals[0] and vals[1] >= expectedVals[1]
 
 	# Determine what the big blind is.
 	# TODO: Necessary/useful?
