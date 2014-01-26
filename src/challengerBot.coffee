@@ -59,14 +59,10 @@ module.exports = class
 		{ betting, self: { cards, chips, position }, players, state: round } = game
 
 		# Easier to play with the hand as a string e.g. 'AcAs'
-		hand = cards.sort().join('')
+		@state.hand = hand = cards.sort().join('')
 		# Convenient strings consisting only of values + suits.
-		faces = hand[0] + hand[2]
-		suits = hand[1] + hand[3]
-
-		@state.faces = faces
-		@state.hand = hand
-		@state.suits = suits
+		@state.faces = faces = hand[0] + hand[2]
+		@state.suits = suits = hand[1] + hand[3]
 
 		# Numerical values of faces.
 		@state.vals = [ @handVals[faces[0]], @handVals[faces[1]] ]
