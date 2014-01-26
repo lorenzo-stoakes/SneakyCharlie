@@ -1,167 +1,153 @@
-info =
-	# We gotta be sneaky Charlie! Sneaky!
-	# http://www.youtube.com/watch?v=29xJRc329eI
-	name: 'SneakyCharlie'
-	email: 'lstoakes@gmail.com'
-	btcWallet: '1EyBrQTnHGiKNwqFcSBn9Ua4KX1t8gQjet'
+module.exports = class
+	constructor: ->
+		@pos[p] = i for p, i in @posNames
 
-# JS abominates sorting. Sort numerically.
-sortNum = (ns) ->
-	ns.sort((a,b) -> a - b)
+		# Assign 2-9.
+		# Don't need to make ints strings, but feels nicer to be explicit here.
+		@handVals['' + i] = i for i in [2..9]
 
-# A poor mans enum.
-pos = {}
-stringPos = do ->
-	posNames = [ 'button', 'sb', 'bb', 'utg', 'mp1', 'mp', 'hj', 'co' ]
-	pos[p] = i for p, i in posNames
+	bet:
+		fold: -1  # Negative value means fold.
+		checkFold: 0
 
-	(pos) -> posNames[pos]
+	handVals: { T: 10, J: 11, Q: 12, K: 13, A: 14 }
 
-bet =
-	fold: -1  # Negative value means fold.
-	checkFold: 0
+	info:
+		# We gotta be sneaky Charlie! Sneaky!
+		# http://www.youtube.com/watch?v=29xJRc329eI
+		name: 'SneakyCharlie'
+		email: 'lstoakes@gmail.com'
+		btcWallet: '1EyBrQTnHGiKNwqFcSBn9Ua4KX1t8gQjet'
 
-handVals = { T: 10, J: 11, Q: 12, K: 13, A: 14 }
-# Assign 2-9.
-do ->
-	# Don't need to make ints strings, but feels nicer to be explicit here.
-	handVals['' + i] = i for i in [2..9]
+	posNames: [ 'button', 'sb', 'bb', 'utg', 'mp1', 'mp', 'hj', 'co' ]
 
-# Maps to above positions.
-preflopRanges = [
-	[ 'A8s+', 'KQ',  'KJ', 'QJ', '22+' ] # button
-	[ 'AQs',  'AK',  '77+' ]             # sb
-	[ 'AQs',  'AK',  '77+' ]             # bb
-	[ 'AQs',  'AK',  '77+' ]             # utg
-	[ 'AJ+',  '55+' ]                    # mp1
-	[ 'AJ+',  'KQs', '22+' ]             # mp
-	[ 'AJ+',  'KQ',  'QJ', '22+' ]       # hj
-	[ 'AJ+',  'KQ',  'QJ', '22+' ]       # co
-]
+	# A poor mans enum.
+	pos: {}
 
-# Check whether a given hand is in the specified range.
-inRange = (hand, range, suits, actualVals) ->
-	# We don't care about the + suffix as it is decorative and implied. Only an 's' suffix
-	# vs. 'o' or missing suffix is meaningful.
-	suited = 's' in range[2...]
-	return false if suited and suits[0] != suits[1]
+	# Map to positions.
+	preflopRanges: [
+		[ 'A8s+', 'KQ',  'KJ', 'QJ', '22+' ] # button
+		[ 'AQs',  'AK',  '77+' ]             # sb
+		[ 'AQs',  'AK',  '77+' ]             # bb
+		[ 'AQs',  'AK',  '77+' ]             # utg
+		[ 'AJ+',  '55+' ]                    # mp1
+		[ 'AJ+',  'KQs', '22+' ]             # mp
+		[ 'AJ+',  'KQ',  'QJ', '22+' ]       # hj
+		[ 'AJ+',  'KQ',  'QJ', '22+' ]       # co
+	]
 
-	# Expected numerical vals from range.
-	expectedVals = (handVals[r] for r in range[...2])
-	sortNum(expectedVals)
+	sortNum: (ns) ->
+		ns.sort((a,b) -> a - b)
 
-	pair = range[0] == range[1]
-	if pair
-		actual = actualVals[0]
-		# Abort if input hand is not a pair.
-		return false if actual != actualVals[1]
-		# Value of expected pair.
-		expected = expectedVals[0]
-		return actual >= expected
+	# We keep track of game state here.
+	state: {}
 
-	# Otherwise we simply need to check that we have a hand greater than or equal to
-	# expectation.
+	# Functions
 
-	return actualVals[0] >= expectedVals[0] and actualVals[1] >= expectedVals[1]
+	# Determine some useful info about the game.
+	analyse: (game) ->
+		{ betting, self: { cards, chips, position }, players, state: round } = game
 
-# Calculate a more useful representation of position.
-calcPos = (playerCount, positionId) ->
-	# 0 == sb so adjust such that 0 = button.
-	positionId++
-	positionId %= playerCount
+		# Easier to play with the hand as a string e.g. 'AcAs'
+		hand = cards.sort().join('')
+		# Convenient strings consisting only of values + suits.
+		faces = hand[0] + hand[2]
+		suits = hand[1] + hand[3]
 
-	# When in button to utg, the position id matches the enum value.
-	return positionId if positionId < 4
+		@state.faces = faces
+		@state.hand = hand
+		@state.suits = suits
 
-	# HJ or CO.
-	fromEnd = playerCount - positionId - 1
-	if fromEnd < 2
-		return [ pos.co, pos.hj ][fromEnd]
+		# Numerical values of faces.
+		@state.vals = [ @handVals[faces[0]], @handVals[faces[1]] ]
+		@sortNum(@state.vals)
 
-	# All that remains is to differentiate between MP1 and MP.
-	if positionId == 4
-		pos.mp1
-	else
-		pos.mp
+		@state.pos = currPos = @calcPos(players.length, position)
 
-getBigBlind = (players) ->
-	ret = 0
-	ret = p.blind for p in players when p.blind > ret
-	return ret
+		@state.bb = @getBigBlind(players)
 
-# Determine some useful info about the game.
-analyse = (game) ->
-	{ betting, self: { cards, chips, position }, players, state: round } = game
+		if round == 'pre-flop'
+			@state.playable = false
+			for range in @preflopRanges[currPos] when @inRange(hand, range, suits, @state.vals)
+				@state.playable = true
+				break
+		else
+			@state.playable = true
 
-	# Easier to play with the hand as a string e.g. 'AcAs'
-	hand = cards.sort().join('')
-	# Convenient strings consisting only of values + suits.
-	faces = hand[0] + hand[2]
-	suits = hand[1] + hand[3]
+		# Do we have a monster hand?
+		@state.monster = @state.faces in [ 'AA', 'KK' ]
+		# Do we have a pair?
+		@state.pair = @state.faces[0] == @state.faces[1]
 
-	# Numerical values of faces.
-	vals = [ handVals[faces[0]], handVals[faces[1]] ]
-	sortNum(vals)
+	# Calculate a more useful representation of position.
+	calcPos: (playerCount, positionId) ->
+		# 0 == sb so adjust such that 0 = button.
+		positionId++
+		positionId %= playerCount
 
-	currPos = calcPos(players.length, position)
+		# When in button to utg, the position id matches the enum value.
+		return positionId if positionId < 4
 
-	bb = getBigBlind(players)
+		# HJ or CO.
+		fromEnd = playerCount - positionId - 1
+		if fromEnd < 2
+			return [ @pos.co, @pos.hj ][fromEnd]
 
-	if round == 'pre-flop'
-		playable = false
-		for range in preflopRanges[currPos] when inRange(hand, range, suits, vals)
-			playable = true
-			break
-	else
-		playable = true
+		# All that remains is to differentiate between MP1 and MP.
+		if positionId == 4
+			@pos.mp1
+		else
+			@pos.mp
 
-	# Do we have a monster hand?
-	monster = faces in [ 'AA', 'KK' ]
-	# Do we have a pair?
-	pair = faces[0] == faces[1]
+	# Check whether a given hand is in the specified range.
+	inRange: (hand, range, suits, actualVals) ->
+		# We don't care about the + suffix as it is decorative and implied. Only an 's' suffix
+		# vs. 'o' or missing suffix is meaningful.
+		suited = 's' in range[2...]
+		return false if suited and suits[0] != suits[1]
 
-	return { bb, betting, chips, faces, hand, monster, pair, playable, pos: currPos, round, suits, vals }
+		# Expected numerical vals from range.
+		expectedVals = (@handVals[r] for r in range[...2])
+		@sortNum(expectedVals)
 
-preflopBet = (state) ->
-	switch
-		# All-in if we have AA, KK.
-		when state.monster then state.chips
-		# If other pair, 4*BB.
-		when state.playable then 4 * state.betting.raise
-		# Otherwise, we have to be careful Charlie! Throw that 72o away!
-		else bet.checkFold
+		pair = range[0] == range[1]
+		if pair
+			actual = actualVals[0]
+			# Abort if input hand is not a pair.
+			return false if actual != actualVals[1]
+			# Value of expected pair.
+			expected = expectedVals[0]
+			return actual >= expected
 
-postflopBet = (state) ->
-	if state.playable
-		4 * state.bb
-	else
-		bet.checkFold
+		# Otherwise we simply need to check that we have a hand greater than or equal to
+		# expectation.
 
-update = (game) ->
-	state = analyse(game)
+		return actualVals[0] >= expectedVals[0] and actualVals[1] >= expectedVals[1]
 
-	switch state.round
-		when 'complete' then null
-		when 'pre-flop' then preflopBet(state)
-		else postflopBet(state)
+	getBigBlind: (players) ->
+		ret = 0
+		ret = p.blind for p in players when p.blind > ret
+		return ret
 
-module.exports =
-if process.NODE_ENV == 'production'
-	-> { info, update }
-else
-	-> {
-		analyse
-		bet
-		calcPos
-		getBigBlind
-		handVals
-		info
-		inRange
-		pos
-		preflopBet
-		preflopRanges
-		postflopBet
-		sortNum
-		stringPos
-		update
-	}
+	preflopBet: ->
+		switch
+			# All-in if we have AA, KK.
+			when @state.monster then @state.chips
+			# If other pair, 4*BB.
+			when @state.playable then 4 * @state.betting.raise
+			# Otherwise, we have to be careful Charlie! Throw that 72o away!
+			else @bet.checkFold
+
+	postflopBet: ->
+		if @state.playable
+			4 * @state.bb
+		else
+			@bet.checkFold
+
+	update: (game) ->
+		@analyse(game)
+
+		switch @state.round
+			when 'complete' then null
+			when 'pre-flop' then @preflopBet()
+			else @postflopBet()
