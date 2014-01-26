@@ -6,7 +6,7 @@ module.exports = class
 		# Don't need to make ints strings, but feels nicer to be explicit here.
 		@handVals['' + i] = i for i in [2..9]
 
-	bet:
+	specialBet:
 		fold: -1  # Negative value means fold.
 		checkFold: 0
 
@@ -133,13 +133,13 @@ module.exports = class
 			# If other pair, 4*BB.
 			when @state.playable then 4 * @state.betting.raise
 			# Otherwise, we have to be careful Charlie! Throw that 72o away!
-			else @bet.checkFold
+			else @specialBet.checkFold
 
 	postflopBet: ->
 		if @state.playable
 			4 * @state.bb
 		else
-			@bet.checkFold
+			@specialBet.checkFold
 	sortNum: (ns) ->
 		ns.sort((a,b) -> a - b)
 
