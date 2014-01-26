@@ -81,13 +81,13 @@ calcPos = (playerCount, positionId) ->
 	# HJ or CO.
 	fromEnd = playerCount - positionId - 1
 	if fromEnd < 2
-		return [ CO, HJ ][fromEnd]
+		return [ pos.co, pos.hj ][fromEnd]
 
 	# All that remains is to differentiate between MP1 and MP.
 	if positionId == 4
-		MP1
+		pos.mp1
 	else
-		MP
+		pos.mp
 
 getBigBlind = (players) ->
 	ret = 0
@@ -134,13 +134,13 @@ preflopBet = (state) ->
 		# If other pair, 4*BB.
 		when state.playable then 4 * state.betting.raise
 		# Otherwise, we have to be careful Charlie! Throw that 72o away!
-		else CHECK_FOLD
+		else bet.checkFold
 
 postflopBet = (state) ->
 	if state.playable
 		4 * state.bb
 	else
-		CHECK_FOLD
+		bet.checkFold
 
 update = (game) ->
 	state = analyse(game)
