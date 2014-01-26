@@ -22,6 +22,7 @@
     "url": "https://github.com/lorenzo-stoakes/SneakyCharlie/issues"
   },
 	"devDependencies": {
+		"chai": "~1.8.1",
 		"coffee-script": "~1.6.3",
 		"mocha": "~1.17.1"
 	}
