@@ -108,13 +108,13 @@ analyse = (game) ->
 	vals = [ handVals[faces[0]], handVals[faces[1]] ]
 	sortNum(vals)
 
-	pos = calcPos(players.length, position)
+	currPos = calcPos(players.length, position)
 
 	bb = getBigBlind(players)
 
 	if round == 'pre-flop'
 		playable = false
-		for range in preflopRanges[pos] when inRange(hand, range, suits, vals)
+		for range in preflopRanges[currPos] when inRange(hand, range, suits, vals)
 			playable = true
 			break
 	else
@@ -125,7 +125,7 @@ analyse = (game) ->
 	# Do we have a pair?
 	pair = faces[0] == faces[1]
 
-	return { bb, betting, chips, faces, hand, monster, pair, playable, pos, round, suits, vals }
+	return { bb, betting, chips, faces, hand, monster, pair, playable, pos: currPos, round, suits, vals }
 
 preflopBet = (state) ->
 	switch
