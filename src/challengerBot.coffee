@@ -50,7 +50,16 @@ module.exports = class
 	]
 
 	# Convenient representation of game state. Generated from provided game var on update.
-	state: {}
+	state:
+		bb: null         # Current big blind.
+		faces: null      # Faces string e.g. AA.
+		hand: null       # Hand string e.g. AcAs.
+		monster: false   # Is this hand a complete monster?
+		pair: false      # Is this hand a pair?
+		playable: false  # Is the hand playable?
+		pos: null        # Current position, index of posNames.
+		suits: null      # Suits string e.g. cs.
+		vals: [ 0, 0 ]   # Sorted numerical face value of cards in hand.
 
 	## Functions
 
