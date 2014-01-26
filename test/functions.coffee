@@ -1,7 +1,6 @@
 require('chai').should()
 
 Charlie = require('../src/challengerBot')
-charlie = new Charlie()
 
 describe "Charlie's functions", ->
 	describe 'sortNum', ->
@@ -9,4 +8,4 @@ describe "Charlie's functions", ->
 		sorted = [ 1, 3, 10, 11, 100 ]
 
 		it 'sorts an array numerically.', ->
-			charlie.sortNum(ns).should.eql(sorted)
+			Charlie::sortNum(ns).should.eql(sorted)
