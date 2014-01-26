@@ -12,3 +12,23 @@ describe 'sortNum', ->
 	it 'Sorts an array numerically.', ->
 		sneaky.sortNum(ns).should.eql(sorted)
 
+describe 'pos', ->
+	positions = [
+		'button'
+		'sb'
+		'bb'
+		'utg'
+		'mp1'
+		'mp'
+		'hj'
+		'co'
+	]
+
+	it 'Should have keys consisting only of all positions', ->
+		sneaky.pos.should.have.keys(positions)
+
+	# Convert array above to obj of { arr[0]: 0, arr[1]: 1, etc. } - i.e. the expected enum.
+	postEnum = _.reduce(positions, ((obj, k, v) -> obj[k] = v; obj), {})
+
+	it 'Should have indexes in the expected order', ->
+		sneaky.pos.should.eql(postEnum)
