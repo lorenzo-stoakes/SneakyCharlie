@@ -1,11 +1,11 @@
 A bot for [JsPoker][0]. I store its code here so I can write tests, etc. + experiment with it without breaking the JsPoker rules.
 
-To set up you need to `npm install` in the JsPoker submodule directory:-
+The bot itself is at `src/challengerBot.coffee`.
 
-    pushd 3rdparty/JsPoker
-	npm install
-	popd
+You can play with the code via a triplet of scripts:
 
-Now run `./watch.sh` to monitor changes in the `challengerBot.coffee` file.
+    ./watch.sh - Watch changes in the bot and deploy in the js poker folder.
+	./test.sh  - Run mocha/chai unit tests.
+	./bench.sh - Pit the bot against the competition.
 
 [0]:https://github.com/mdp/JsPoker
