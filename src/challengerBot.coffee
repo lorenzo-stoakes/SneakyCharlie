@@ -1,17 +1,27 @@
+# A class representing the Sneaky Charlie JsPoker bot. As per the rules, all functionality is
+# kept in a single module.
 module.exports = class
+	## Ctor
+
 	constructor: ->
+		# Assign position 'enum'.
 		@pos[p] = i for p, i in @posNames
 
 		# Assign 2-9.
 		# Don't need to make ints strings, but feels nicer to be explicit here.
 		@handVals['' + i] = i for i in [2..9]
 
+	## Instance Vars
+
+	# Bet values that have meaning other than their numerical value.
 	specialBet:
 		fold: -1  # Negative value means fold.
-		checkFold: 0
+		checkFold: 0 # Check if possible, fold otherwise.
 
+	# Numerical values of each face value. 2-9 are assigned in ctor.
 	handVals: { T: 10, J: 11, Q: 12, K: 13, A: 14 }
 
+	# Tell the world who we are.
 	info:
 		# We gotta be sneaky Charlie! Sneaky!
 		# http://www.youtube.com/watch?v=29xJRc329eI
@@ -19,12 +29,15 @@ module.exports = class
 		email: 'lstoakes@gmail.com'
 		btcWallet: '1EyBrQTnHGiKNwqFcSBn9Ua4KX1t8gQjet'
 
+	# Names of each position around the table. The assignment of these varies depending on
+	# the number of players, see calcPos() for details on how this is assigned.
 	posNames: [ 'button', 'sb', 'bb', 'utg', 'mp1', 'mp', 'hj', 'co' ]
 
-	# A poor mans enum.
+	# A poor mans enum, assigned in ctor mapping position names to index positions in
+	# @posNames.
 	pos: {}
 
-	# Map to positions.
+	# Ranges of hands to play for each position in preflop - maps to posNames.
 	preflopRanges: [
 		[ 'A8s+', 'KQ',  'KJ', 'QJ', '22+' ] # button
 		[ 'AQs',  'AK',  '77+' ]             # sb
@@ -36,12 +49,12 @@ module.exports = class
 		[ 'AJ+',  'KQ',  'QJ', '22+' ]       # co
 	]
 
-	# We keep track of game state here.
+	# Convenient representation of game state. Generated from provided game var on update.
 	state: {}
 
-	# Functions
+	## Functions
 
-	# Determine some useful info about the game.
+	# Determine some useful info about the game, assign to @state.
 	analyse: (game) ->
 		{ betting, self: { cards, chips, position }, players, state: round } = game
 
@@ -121,11 +134,14 @@ module.exports = class
 
 		return actualVals[0] >= expectedVals[0] and actualVals[1] >= expectedVals[1]
 
+	# Determine what the big blind is.
+	# TODO: Necessary/useful?
 	getBigBlind: (players) ->
 		ret = 0
 		ret = p.blind for p in players when p.blind > ret
 		return ret
 
+	# Given the current state of the game, how much should we bet preflop?
 	preflopBet: ->
 		switch
 			# All-in if we have AA, KK.
@@ -135,14 +151,18 @@ module.exports = class
 			# Otherwise, we have to be careful Charlie! Throw that 72o away!
 			else @specialBet.checkFold
 
+	# Given the current state of the game, how much should we bet postflop?
 	postflopBet: ->
 		if @state.playable
 			4 * @state.bb
 		else
 			@specialBet.checkFold
+
+	# Javascript abominates sorting, force numerical sort.
 	sortNum: (ns) ->
 		ns.sort((a,b) -> a - b)
 
+	# Game has updated and we need to do something.
 	update: (game) ->
 		@analyse(game)
 
