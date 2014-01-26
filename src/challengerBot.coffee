@@ -85,9 +85,9 @@ module.exports = class
 			@state.playable = true
 
 		# Do we have a monster hand?
-		@state.monster = @state.faces in [ 'AA', 'KK' ]
+		@state.monster = faces in [ 'AA', 'KK' ]
 		# Do we have a pair?
-		@state.pair = @state.faces[0] == @state.faces[1]
+		@state.pair = faces[0] == faces[1]
 
 	# Calculate a more useful representation of position.
 	calcPos: (playerCount, positionId) ->
