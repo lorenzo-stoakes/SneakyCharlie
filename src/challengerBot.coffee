@@ -100,6 +100,9 @@ module.exports = class
 		positionId++
 		positionId %= playerCount
 
+		# Special case - heads up player 2 is the big blind.
+		return @pos.bb if playerCount == 2 and positionId == 1
+
 		# When in button to utg, the position id matches the enum value.
 		return positionId if positionId < 4
 
