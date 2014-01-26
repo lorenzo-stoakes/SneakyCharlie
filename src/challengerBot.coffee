@@ -145,4 +145,23 @@ update = (game) ->
 		when 'pre-flop' then preflopBet(state)
 		else postflopBet(state)
 
-module.exports = -> { info, update }
+module.exports =
+if process.NODE_ENV == 'production'
+	-> { info, update }
+else
+	-> {
+		analyse
+		bet
+		calcPos
+		getBigBlind
+		handVals
+		info
+		inRange
+		pos
+		preflopBet
+		preflopRanges
+		postflopBet
+		sortNum
+		stringPos
+		update
+	}
