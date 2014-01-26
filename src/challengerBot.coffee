@@ -15,8 +15,16 @@ sortNum = (ns) ->
 # A poor mans enum.
 [ BUTTON, SB, BB, UTG, MP1, MP, HJ, CO ] = [0...8]
 posNames = [ 'button', 'sb', 'bb', 'utg', 'mp1', 'mp', 'hj', 'co' ]
+pos = {}
+stringPos = do ->
+	posNames = [ 'button', 'sb', 'bb', 'utg', 'mp1', 'mp', 'hj', 'co' ]
+	pos[p] = i for p, i in posNames
 
-stringPos = (pos) -> posNames[pos]
+	(pos) -> posNames[pos]
+
+bet =
+	fold: -1  # Negative value means fold.
+	checkFold: 0
 
 handVals = { T: 10, J: 11, Q: 12, K: 13, A: 14 }
 # Assign 2-9.
