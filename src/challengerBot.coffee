@@ -5,16 +5,11 @@ info =
 	email: 'lstoakes@gmail.com'
 	btcWallet: '1EyBrQTnHGiKNwqFcSBn9Ua4KX1t8gQjet'
 
-FOLD = -1 # Negative value means fold.
-CHECK_FOLD = 0
-
 # JS abominates sorting. Sort numerically.
 sortNum = (ns) ->
 	ns.sort((a,b) -> a - b)
 
 # A poor mans enum.
-[ BUTTON, SB, BB, UTG, MP1, MP, HJ, CO ] = [0...8]
-posNames = [ 'button', 'sb', 'bb', 'utg', 'mp1', 'mp', 'hj', 'co' ]
 pos = {}
 stringPos = do ->
 	posNames = [ 'button', 'sb', 'bb', 'utg', 'mp1', 'mp', 'hj', 'co' ]
