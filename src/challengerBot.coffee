@@ -1,5 +1,5 @@
 info =
-	# We gotta be sneaky Charlie! Yeah, sneaky!
+	# We gotta be sneaky Charlie! Sneaky!
 	# http://www.youtube.com/watch?v=29xJRc329eI
 	name: 'SneakyCharlie'
 	email: 'lstoakes@gmail.com'
