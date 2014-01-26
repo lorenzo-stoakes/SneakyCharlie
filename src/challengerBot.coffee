@@ -36,9 +36,6 @@ module.exports = class
 		[ 'AJ+',  'KQ',  'QJ', '22+' ]       # co
 	]
 
-	sortNum: (ns) ->
-		ns.sort((a,b) -> a - b)
-
 	# We keep track of game state here.
 	state: {}
 
@@ -143,6 +140,8 @@ module.exports = class
 			4 * @state.bb
 		else
 			@bet.checkFold
+	sortNum: (ns) ->
+		ns.sort((a,b) -> a - b)
 
 	update: (game) ->
 		@analyse(game)
