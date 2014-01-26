@@ -2,7 +2,7 @@ require('chai').should()
 
 Charlie = require('../src/challengerBot')
 
-describe "Charlie's functions", ->
+describe "Charlie's function", ->
 	describe 'analyse', ->
 		charlie = new Charlie()
 
