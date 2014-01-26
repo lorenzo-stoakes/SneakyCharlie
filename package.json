@@ -1,0 +1,27 @@
+{
+  "name": "SneakyCharlie",
+  "version": "0.0.0",
+  "description": "Poker bot for JsPoker",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/lorenzo-stoakes/SneakyCharlie.git"
+  },
+  "keywords": [
+    "poker",
+    "bot",
+    "JsPoker",
+    "node",
+    "coffeescript"
+  ],
+  "author": "Lorenzo Stoakes <lstoakes@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lorenzo-stoakes/SneakyCharlie/issues"
+  },
+	"devDependencies": {
+		"mocha": "~1.17.1"
+	}
+}
