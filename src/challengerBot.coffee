@@ -66,7 +66,7 @@ inRange = (hand, range, suits, actualVals) ->
 
 # Calculate a more useful representation of position.
 calcPos = (playerCount, positionId) ->
-	# 0 == SB so adjust such that 0 = BUTTON.
+	# 0 == sb so adjust such that 0 = button.
 	positionId++
 	positionId %= playerCount
 
