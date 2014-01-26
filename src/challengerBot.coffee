@@ -13,11 +13,6 @@ module.exports = class
 
 	## Instance Vars
 
-	# Bet values that have meaning other than their numerical value.
-	specialBet:
-		fold: -1  # Negative value means fold.
-		checkFold: 0 # Check if possible, fold otherwise.
-
 	# Numerical values of each face value. 2-9 are assigned in ctor.
 	handVals: { T: 10, J: 11, Q: 12, K: 13, A: 14 }
 
@@ -29,13 +24,13 @@ module.exports = class
 		email: 'lstoakes@gmail.com'
 		btcWallet: '1EyBrQTnHGiKNwqFcSBn9Ua4KX1t8gQjet'
 
-	# Names of each position around the table. The assignment of these varies depending on
-	# the number of players, see calcPos() for details on how this is assigned.
-	posNames: [ 'button', 'sb', 'bb', 'utg', 'mp1', 'mp', 'hj', 'co' ]
-
 	# A poor mans enum, assigned in ctor mapping position names to index positions in
 	# @posNames.
 	pos: {}
+
+	# Names of each position around the table. The assignment of these varies depending on
+	# the number of players, see calcPos() for details on how this is assigned.
+	posNames: [ 'button', 'sb', 'bb', 'utg', 'mp1', 'mp', 'hj', 'co' ]
 
 	# Ranges of hands to play for each position in preflop - maps to posNames.
 	preflopRanges: [
@@ -48,6 +43,11 @@ module.exports = class
 		[ 'AJ+',  'KQ',  'QJ', '22+' ]       # hj
 		[ 'AJ+',  'KQ',  'QJ', '22+' ]       # co
 	]
+
+	# Bet values that have meaning other than their numerical value.
+	specialBet:
+		fold: -1  # Negative value means fold.
+		checkFold: 0 # Check if possible, fold otherwise.
 
 	# Convenient representation of game state. Generated from provided game var on update.
 	state:
