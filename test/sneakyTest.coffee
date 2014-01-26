@@ -1,4 +1,6 @@
+_ = require('lodash')
 require('chai').should()
+
 makeSneaky = require '../src/challengerBot'
 
 sneaky = makeSneaky()
