@@ -52,6 +52,7 @@ module.exports = class
 	# Convenient representation of game state. Generated from provided game var on update.
 	state:
 		bb: null         # Current big blind.
+		betting: null    # Current betting state of game.
 		chips: 0         # Number of chips Charlie currently has.
 		faces: null      # Faces string e.g. AA.
 		hand: null       # Hand string e.g. AcAs.
@@ -67,6 +68,8 @@ module.exports = class
 	# Determine some useful info about the game, assign to @state.
 	analyse: (game) ->
 		{ betting, self: { cards, chips, position }, players, state: round } = game
+
+		@state.betting = betting
 
 		# Easier to play with the hand as a string e.g. 'AcAs'
 		@state.hand = hand = cards.sort().join('')
