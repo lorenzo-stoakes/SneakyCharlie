@@ -1,8 +1,6 @@
 # A class representing the Sneaky Charlie JsPoker bot. As per the rules, all functionality is
 # kept in a single module.
 module.exports = class
-	## Ctor
-
 	constructor: ->
 		# Assign position 'enum'.
 		@pos[p] = i for p, i in @posNames
