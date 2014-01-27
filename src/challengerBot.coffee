@@ -88,8 +88,8 @@ module.exports = class
 
 		@state.bb = @getBigBlind(players)
 
+		@state.playable = false
 		if round == 'pre-flop'
-			@state.playable = false
 			for range in @preflopRanges[currPos] when @inRange(range)
 				@state.playable = true
 				break
