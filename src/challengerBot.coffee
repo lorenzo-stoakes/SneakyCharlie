@@ -11,6 +11,19 @@ module.exports = class
 		# Don't need to make ints strings, but feels nicer to be explicit here.
 		@handVals['' + i] = i for i in [2..9]
 
+		@state =
+			bb: null         # Current big blind.
+			betting: null    # Current betting state of game.
+			chips: 0         # Number of chips Charlie currently has.
+			faces: null      # Faces string e.g. AA.
+			hand: null       # Hand string e.g. AcAs.
+			monster: false   # Is this hand a complete monster?
+			pair: false      # Is this hand a pair?
+			playable: false  # Is the hand playable?
+			pos: null        # Current position, index of posNames.
+			suits: null      # Suits string e.g. cs.
+			vals: [ 0, 0 ]   # Sorted numerical face value of cards in hand.
+
 	## Instance Vars
 
 	# Numerical values of each face value. 2-9 are assigned in ctor.
@@ -50,18 +63,7 @@ module.exports = class
 		checkFold: 0 # Check if possible, fold otherwise.
 
 	# Convenient representation of game state. Generated from provided game var on update.
-	state:
-		bb: null         # Current big blind.
-		betting: null    # Current betting state of game.
-		chips: 0         # Number of chips Charlie currently has.
-		faces: null      # Faces string e.g. AA.
-		hand: null       # Hand string e.g. AcAs.
-		monster: false   # Is this hand a complete monster?
-		pair: false      # Is this hand a pair?
-		playable: false  # Is the hand playable?
-		pos: null        # Current position, index of posNames.
-		suits: null      # Suits string e.g. cs.
-		vals: [ 0, 0 ]   # Sorted numerical face value of cards in hand.
+	state: null
 
 	## Functions
 
