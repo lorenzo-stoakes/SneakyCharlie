@@ -40,8 +40,7 @@ setCharlie = (charlie, hand) ->
 describe "Charlie's function", ->
 	describe 'analyse', ->
 		charlie = new Charlie()
-
-		{ analyse } = charlie
+		analyse = charlie.analyse.bind(charlie)
 
 		it 'is a function', ->
 			analyse.should.be.a('function')
