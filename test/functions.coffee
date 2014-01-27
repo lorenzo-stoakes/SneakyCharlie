@@ -48,7 +48,6 @@ describe "Charlie's function", ->
 	describe 'calcPos', ->
 		charlie = new Charlie()
 		{ pos } = charlie
-
 		calcPos = charlie.calcPos.bind(charlie)
 
 		it 'is a function', ->
