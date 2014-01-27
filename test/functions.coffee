@@ -1,9 +1,41 @@
+_ = require('lodash')
 require('chai').should()
 
 Charlie = require('../src/challengerBot')
 
 # If ALL_TESTS not set run a subset in sane time, otherwise it takes several seconds.
 QUICK = !process.env.ALL_TESTS
+
+allFaces = _.map([ 2..9 ], (n) -> '' + n)
+allFaces = allFaces.concat([ 'T', 'J', 'Q', 'K', 'A' ])
+allSuits = [ 'h', 'd', 's', 'c' ]
+
+allHands = []
+# Populate allHands. By nature of this loop, will always be in sorted order.
+for face1, i in allFaces
+	for face2 in allFaces[i...]
+		for suit1, j in allSuits
+			for suit2 in allSuits[j...]
+				# Ignore duplicates.
+				continue if face1 == face2 and suit1 == suit2
+
+				allHands.push(face1 + suit1 + face2 + suit2)
+
+# Helper function to set charlie up to have the specified hand.
+# TODO: Might be worthwhile transferring to Charlie himself.
+setCharlie = (charlie, hand) ->
+	charlie.state.hand = hand
+
+	[ face1, suit1, face2, suit2 ] = hand
+
+	charlie.state.faces = faces = face1 + face2
+	charlie.state.suits = suits = suit1 + suit2
+
+	# Guaranteed to be in order.
+	charlie.state.vals = [ charlie.handVals[face1], charlie.handVals[face2] ]
+
+	charlie.state.monster = faces in [ 'AA', 'KK' ]
+	charlie.state.pair = face1 == face2
 
 describe "Charlie's function", ->
 	describe 'analyse', ->
@@ -57,6 +89,45 @@ describe "Charlie's function", ->
 			for n in [8..12]
 				calcPos(n, i).should.equal(p) for p, i in table
 				table.splice(4, 0, pos.mp)
+
+	describe 'inRange', ->
+		charlie = new Charlie()
+
+		_.each allFaces, (face1, i) ->
+			_.each allFaces[i...], (face2) ->
+				range = "#{face1}#{face2}"
+				rangePair = range[0] == range[1]
+				_.each allHands, (hand) ->
+					# Only consider 5% of hands if quick mode is activated.
+					return if QUICK and Math.random() > 0.05
+
+					it "detects correctly for range #{range} and hand #{hand}", ->
+						setCharlie(charlie, hand)
+						{ faces, pair, suits } = charlie.state
+
+						actualVal1 = charlie.handVals[faces[0]]
+						expectedVal1 = charlie.handVals[face1]
+
+						actualVal2 = charlie.handVals[faces[1]]
+						expectedVal2 = charlie.handVals[face2]
+
+						expected =
+							if rangePair
+								pair and actualVal1 >= expectedVal1
+							else
+								actualVal1 >= expectedVal1 and actualVal2 >= expectedVal2
+
+						charlie.inRange(range).should.equal(expected)
+						# Test with the '+' suffix as well. This should make no difference.
+						charlie.inRange(range + '+').should.equal(expected)
+
+						if !rangePair
+							it 'suited', ->
+								# TODO: Bring suited into Charlie.
+								suited = suits[0] == suits[1]
+								expected = expected and !pair and suited
+
+								charlie.inRange(range + 's').should.equal(expected)
 
 	describe 'sortNum', ->
 		ns = [ 10, 3, 1, 100, 11 ]
