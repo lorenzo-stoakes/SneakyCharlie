@@ -38,6 +38,18 @@ module.exports = class
 		email: 'lstoakes@gmail.com'
 		btcWallet: '1EyBrQTnHGiKNwqFcSBn9Ua4KX1t8gQjet'
 
+	# Map between poker hands and their value.
+	pokerHand:
+		straightFlush: 8
+		fourKind:      7
+		fullHouse:     6
+		flush:         5
+		straight:      4
+		threeKind:     3
+		twoPair:       2
+		pair:          1
+		highCard:      0
+
 	# A poor mans enum, assigned in ctor mapping position names to index positions in
 	# @posNames.
 	pos: {}

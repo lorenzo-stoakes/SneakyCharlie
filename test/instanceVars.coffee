@@ -49,6 +49,30 @@ describe "Charlie's instance variables", ->
 		it 'should specify name, email and btcWallet only', ->
 			charlie.info.should.have.keys([ 'name', 'email', 'btcWallet' ])
 
+	describe 'pokerHand', ->
+		{ pokerHand } = charlie
+
+		keys = [
+			'highCard'
+			'pair'
+			'twoPair'
+			'threeKind'
+			'straight'
+			'flush'
+			'fullHouse'
+			'fourKind'
+			'straightFlush'
+		]
+
+		it 'should be an object', ->
+			pokerHand.should.be.an('object')
+
+		it 'should have expected keys', ->
+			pokerHand.should.have.keys(keys)
+
+		it 'should have indexes in the expected order', ->
+			pokerHand.should.eql(arrayToReverseObj(keys))
+
 	describe 'pos', ->
 		{ pos } = charlie
 
