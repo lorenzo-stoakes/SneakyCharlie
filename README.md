@@ -5,7 +5,7 @@ The bot itself is at `src/challengerBot.coffee`.
 You can play with the code via a triplet of scripts:
 
     ./watch.sh - Watch changes in the bot and deploy in the js poker folder.
-	./test.sh  - Run mocha/chai unit tests.
+	./test.sh  - Run mocha/chai unit tests. Assign ALL_TESTS to run slooow but complete test suite.
 	./bench.sh - Pit the bot against the competition.
 
 [0]:https://github.com/mdp/JsPoker
