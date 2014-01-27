@@ -155,6 +155,13 @@ module.exports = class
 		else
 			@pos.mp
 
+	# Determine what the big blind is.
+	# TODO: Necessary/useful?
+	getBigBlind: (players) ->
+		ret = 0
+		ret = p.blind for p in players when p.blind > ret
+		return ret
+
 	# Check whether the current hand is in the specified range.
 	inRange: (range) ->
 		{ pair, suits, vals } = @state
@@ -182,13 +189,6 @@ module.exports = class
 		# expectation.
 
 		return vals[0] >= expectedVals[0] and vals[1] >= expectedVals[1]
-
-	# Determine what the big blind is.
-	# TODO: Necessary/useful?
-	getBigBlind: (players) ->
-		ret = 0
-		ret = p.blind for p in players when p.blind > ret
-		return ret
 
 	# Given the current state of the game, how much should we bet preflop?
 	preflopBet: ->
