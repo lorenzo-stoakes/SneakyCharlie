@@ -50,6 +50,19 @@ module.exports = class
 		pair:          1
 		highCard:      0
 
+	# Poker hand names, map to pokerHands values.
+	pokerHandNames: [
+		'high card'
+		'pair'
+		'two pair'
+		'three of a kind'
+		'straight'
+		'flush'
+		'full house'
+		'four of a kind'
+		'straight flush'
+	]
+
 	# A poor mans enum, assigned in ctor mapping position names to index positions in
 	# @posNames.
 	pos: {}

@@ -73,6 +73,25 @@ describe "Charlie's instance variables", ->
 		it 'should have indexes in the expected order', ->
 			pokerHand.should.eql(arrayToReverseObj(keys))
 
+	describe 'pokerHandNames', ->
+		{ pokerHandNames } = charlie
+
+		it 'should be an array', ->
+			pokerHandNames.should.be.an('array')
+
+		it 'should have expected values', ->
+			pokerHandNames.should.eql [
+				'high card'
+				'pair'
+				'two pair'
+				'three of a kind'
+				'straight'
+				'flush'
+				'full house'
+				'four of a kind'
+				'straight flush'
+			]
+
 	describe 'pos', ->
 		{ pos } = charlie
 
