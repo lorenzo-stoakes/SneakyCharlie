@@ -51,8 +51,81 @@ describe "Charlie's function", ->
 		charlie = new Charlie()
 		analyse = charlie.analyse.bind(charlie)
 
+		sortNumArgs = null
+		calcPosArgs = null
+		getBigBlindArgs = null
+
+		# Stub out some functions.
+		charlie.sortNum = ->
+			sortNumArgs = argsToArray(arguments)
+
+		charlie.calcPos = ->
+			calcPosArgs = argsToArray(arguments)
+
+			return charlie.pos.co
+
+		charlie.getBigBlind = ->
+			getBigBlindArgs = argsToArray(arguments)
+
+			return 17
+
 		it 'is a function', ->
 			analyse.should.be.a('function')
+
+		analyse(gameData)
+		{ state } = charlie
+
+		it 'should set betting equal to input betting', ->
+			state.betting.should.eql(gameData.betting)
+
+		it 'should set the correct community cards', ->
+			state.community.should.equal('5c9sKh')
+
+		it 'should set the correct community suits', ->
+			state.communitySuits.should.equal('chs')
+
+		it 'should set the correct community vals', ->
+			state.communityVals.should.eql([ 5, 9, 13 ])
+
+		it 'should have set the correct hand', ->
+			state.hand.should.equal('4sJd')
+
+		it 'should have set the correct faces', ->
+			state.faces.should.equal('4J')
+
+		# TODO: Perhaps sort?
+		it 'should have set the correct suits', ->
+			state.suits.should.equal('sd')
+
+		it 'should have set the correct number of chips', ->
+			state.chips.should.equal(490)
+
+		it 'should have set the correct vals', ->
+			state.vals.should.eql([ 4, 11 ])
+
+		it 'should have called sortNum with expected inputs', ->
+			sortNumArgs.should.eql([ [ 4, 11 ] ])
+
+		it 'should have called calcPos with expected inputs', ->
+			calcPosArgs.should.eql([ 6, 4 ])
+
+		it 'should have assigned pos using the result from calcPos', ->
+			state.pos.should.equal(charlie.pos.co)
+
+		it 'should have called getBigBlind with expected inputs', ->
+			getBigBlindArgs.should.eql([ gameData.players ])
+
+		it 'should have assigned bb with the result from getBigBlind', ->
+			state.bb.should.equal(17)
+
+		it 'should have marked this postflop play as playable', ->
+			state.playable.should.equal(true)
+
+		it "shouldn't mark the hand as a monster", ->
+			state.monster.should.equal(false)
+
+		it "shouldn't mark the hand as a pair", ->
+			state.pair.should.equal(false)
 
 	describe 'calcPos', ->
 		charlie = new Charlie()
