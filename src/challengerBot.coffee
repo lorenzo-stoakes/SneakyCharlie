@@ -119,20 +119,21 @@ module.exports = class
 
 	# Check whether the current hand is in the specified range.
 	inRange: (range) ->
-		{ suits, vals } = @state
+		{ pair, suits, vals } = @state
 
 		# We don't care about the + suffix as it is decorative and implied. Only an 's' suffix
 		# vs. 'o' or missing suffix is meaningful.
-		suited = 's' in range[2...]
-		return false if suited and suits[0] != suits[1]
+		rangeSuited = 's' in range[2...]
+		return false if rangeSuited and !pair and suits[0] != suits[1]
 
 		# Expected numerical vals from range.
 		expectedVals = (@handVals[r] for r in range[...2])
 		@sortNum(expectedVals)
 
-		pair = range[0] == range[1]
-		if pair
+		rangePair = range[0] == range[1]
+		if rangePair
 			actual = vals[0]
+
 			# Abort if input hand is not a pair.
 			return false if actual != vals[1]
 			# Value of expected pair.
