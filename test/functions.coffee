@@ -211,6 +211,22 @@ describe "Charlie's function", ->
 
 								inRange(range + 's').should.equal(expected)
 
+	describe 'getBigBlind', ->
+		it 'should return the biggest blind any player possesses.', ->
+			players = [
+				blind: 50
+			,
+				blind: 0
+			,
+				blind: -10
+			,
+				blind: 15
+			,
+				blind: 35
+			]
+
+			Charlie::getBigBlind(players).should.equal(50)
+
 	describe 'sortNum', ->
 		ns = [ 10, 3, 1, 100, 11 ]
 		sorted = [ 1, 3, 10, 11, 100 ]
