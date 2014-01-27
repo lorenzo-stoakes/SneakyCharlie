@@ -151,6 +151,8 @@ describe "Charlie's instance variables", ->
 				'monster'
 				'pair'
 				'playable'
+				'pokerHand'
+				'pokerVal'
 				'pos'
 				'suits'
 				'vals'
@@ -170,6 +172,8 @@ describe "Charlie's instance variables", ->
 			(state.monster ? false).should.be.a('boolean')
 			(state.pair ? false).should.be.a('boolean')
 			(state.playable ? false).should.be.a('boolean')
+			(state.pokerHand ? 0).should.be.an('number')
+			(state.pokerVal ? 0).should.be.an('number')
 			(state.pos ? 0).should.be.a('number')
 			(state.suits ? '').should.be.a('string')
 			vals.should.be.an('array')

@@ -21,6 +21,8 @@ module.exports = class
 			monster: false       # Is this hand a complete monster?
 			pair: false          # Is this hand a pair?
 			playable: false      # Is the hand playable?
+			pokerHand: null      # What is our current poker hand?
+			pokerVal: 0          # The 'value' of our poker hand, i.e. high card.
 			pos: null            # Current position, index of posNames.
 			suits: null          # Suits string e.g. cs.
 			vals: [ 0, 0 ]       # Sorted numerical face value of cards in hand.
