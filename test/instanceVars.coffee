@@ -4,6 +4,15 @@ require('chai').should()
 Charlie = require('../src/challengerBot')
 charlie = new Charlie()
 
+# Helper function to generate object mapping from array entries to index values.
+arrayToReverseObj = (arr) ->
+	ret = {}
+
+	for val, i in arr
+		ret[val] = i
+
+	return ret
+
 describe "Charlie's instance variables", ->
 	positions = [
 		'button'
@@ -47,11 +56,7 @@ describe "Charlie's instance variables", ->
 			pos.should.have.keys(positions)
 
 		it 'should have indexes in the expected order', ->
-			# Convert array above to obj of { arr[0]: 0, arr[1]: 1, etc. } - i.e. the
-			# expected enum.
-			postEnum = _.reduce(positions, ((obj, k, v) -> obj[k] = v; obj), {})
-
-			pos.should.eql(postEnum)
+			pos.should.eql(arrayToReverseObj(positions))
 
 	describe 'posNames', ->
 		it 'should match expected values', ->
