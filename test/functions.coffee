@@ -250,6 +250,19 @@ describe "Charlie's function", ->
 			charlie = new Charlie()
 			charlie.preflopBet().should.equal(charlie.specialBet.checkFold)
 
+	describe 'postflopBet', ->
+		charlie = new Charlie()
+
+		charlie.state.bb = 7
+
+		it 'plays 4*BB if hand is playable', ->
+			charlie.state.playable = true
+			charlie.postflopBet().should.equal(28)
+
+		it 'check/folds if not playable', ->
+			charlie.state.playable = false
+			charlie.postflopBet().should.equal(charlie.specialBet.checkFold)
+
 	describe 'sortNum', ->
 		ns = [ 10, 3, 1, 100, 11 ]
 		sorted = [ 1, 3, 10, 11, 100 ]
