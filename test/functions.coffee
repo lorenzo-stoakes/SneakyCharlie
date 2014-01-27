@@ -1,7 +1,11 @@
 _ = require('lodash')
+fs = require('fs')
 require('chai').should()
 
 Charlie = require('../src/challengerBot')
+
+# Use example game data from JsPoker README.
+gameData = JSON.parse(fs.readFileSync(__dirname + '/GameData.json'))
 
 # If ALL_TESTS not set run a subset in sane time, otherwise it takes several seconds.
 QUICK = !process.env.ALL_TESTS
