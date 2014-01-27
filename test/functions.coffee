@@ -95,6 +95,7 @@ describe "Charlie's function", ->
 
 	describe 'inRange', ->
 		charlie = new Charlie()
+		inRange = charlie.inRange.bind(charlie)
 
 		_.each allFaces, (face1, i) ->
 			_.each allFaces[i...], (face2) ->
@@ -120,9 +121,9 @@ describe "Charlie's function", ->
 							else
 								actualVal1 >= expectedVal1 and actualVal2 >= expectedVal2
 
-						charlie.inRange(range).should.equal(expected)
+						inRange(range).should.equal(expected)
 						# Test with the '+' suffix as well. This should make no difference.
-						charlie.inRange(range + '+').should.equal(expected)
+						inRange(range + '+').should.equal(expected)
 
 						if !rangePair
 							it 'suited', ->
@@ -130,7 +131,7 @@ describe "Charlie's function", ->
 								suited = suits[0] == suits[1]
 								expected = expected and !pair and suited
 
-								charlie.inRange(range + 's').should.equal(expected)
+								inRange(range + 's').should.equal(expected)
 
 	describe 'sortNum', ->
 		ns = [ 10, 3, 1, 100, 11 ]
