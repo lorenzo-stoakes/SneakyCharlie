@@ -165,7 +165,7 @@ module.exports = class
 		switch
 			# All-in if we have AA, KK.
 			when @state.monster then @state.chips
-			# If other pair, 4*BB.
+			# If other pair, 4*min raise.
 			when @state.playable then 4 * @state.betting.raise
 			# Otherwise, we have to be careful Charlie! Throw that 72o away!
 			else @specialBet.checkFold
