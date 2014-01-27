@@ -21,6 +21,11 @@ for face1, i in allFaces
 
 				allHands.push(face1 + suit1 + face2 + suit2)
 
+# Helper function to do that grand old js abomination task of extracting an array from an
+# arguments object.
+argsToArray = (args) ->
+	return Array.prototype.slice.call(args, 0)
+
 # Helper function to set charlie up to have the specified hand.
 # TODO: Might be worthwhile transferring to Charlie himself.
 setCharlie = (charlie, hand) ->
