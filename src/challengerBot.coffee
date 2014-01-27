@@ -62,7 +62,8 @@ module.exports = class
 		fold: -1  # Negative value means fold.
 		checkFold: 0 # Check if possible, fold otherwise.
 
-	# Convenient representation of game state. Generated from provided game var on update.
+	# Convenient representation of game state. Generated from provided game var on
+	# update. Assigned in ctor.
 	state: null
 
 	## Functions
