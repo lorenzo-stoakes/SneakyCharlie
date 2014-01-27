@@ -227,6 +227,29 @@ describe "Charlie's function", ->
 
 			Charlie::getBigBlind(players).should.equal(50)
 
+	describe 'preflopBet', ->
+		it 'goes all-in with a monster hand', ->
+			charlie = new Charlie()
+			charlie.state.chips = 100
+			charlie.state.monster = true
+
+			# Playability should make no difference.
+			charlie.state.playable = true
+			charlie.preflopBet().should.equal(100)
+			charlie.state.playable = false
+			charlie.preflopBet().should.equal(100)
+
+		it 'plays 4*minimum raise with a playable hand', ->
+			charlie = new Charlie()
+			charlie.state.betting = raise: 15
+			charlie.state.playable = true
+
+			charlie.preflopBet().should.equal(60)
+
+		it 'check/folds if neither playable nor monster', ->
+			charlie = new Charlie()
+			charlie.preflopBet().should.equal(charlie.specialBet.checkFold)
+
 	describe 'sortNum', ->
 		ns = [ 10, 3, 1, 100, 11 ]
 		sorted = [ 1, 3, 10, 11, 100 ]
