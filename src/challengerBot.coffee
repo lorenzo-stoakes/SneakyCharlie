@@ -52,6 +52,7 @@ module.exports = class
 	# Convenient representation of game state. Generated from provided game var on update.
 	state:
 		bb: null         # Current big blind.
+		chips: 0         # Number of chips Charlie currently has.
 		faces: null      # Faces string e.g. AA.
 		hand: null       # Hand string e.g. AcAs.
 		monster: false   # Is this hand a complete monster?
@@ -72,6 +73,8 @@ module.exports = class
 		# Convenient strings consisting only of values + suits.
 		@state.faces = faces = hand[0] + hand[2]
 		@state.suits = suits = hand[1] + hand[3]
+
+		@state.chips = chips
 
 		# Numerical values of faces.
 		@state.vals = [ @handVals[faces[0]], @handVals[faces[1]] ]

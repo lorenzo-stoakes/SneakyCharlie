@@ -93,6 +93,7 @@ describe "Charlie's instance variables", ->
 		it 'should contain only expected keys', ->
 			state.should.have.keys [
 				'bb'
+				'chips'
 				'faces'
 				'hand'
 				'monster'
@@ -107,6 +108,7 @@ describe "Charlie's instance variables", ->
 
 		it 'should have keys of expected type', ->
 			(state.bb ? 0).should.be.a('number')
+			(state.chips ? 0).should.be.a('number')
 			(state.faces ? '').should.be.a('string')
 			(state.hand ? '').should.be.a('string')
 			(state.monster ? false).should.be.a('boolean')
