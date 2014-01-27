@@ -10,17 +10,20 @@ module.exports = class
 		@handVals['' + i] = i for i in [2..9]
 
 		@state =
-			bb: null         # Current big blind.
-			betting: null    # Current betting state of game.
-			chips: 0         # Number of chips Charlie currently has.
-			faces: null      # Faces string e.g. AA.
-			hand: null       # Hand string e.g. AcAs.
-			monster: false   # Is this hand a complete monster?
-			pair: false      # Is this hand a pair?
-			playable: false  # Is the hand playable?
-			pos: null        # Current position, index of posNames.
-			suits: null      # Suits string e.g. cs.
-			vals: [ 0, 0 ]   # Sorted numerical face value of cards in hand.
+			bb: null             # Current big blind.
+			betting: null        # Current betting state of game.
+			chips: 0             # Number of chips Charlie currently has.
+			community: null      # Community cards string, e.g. 'Ac3d5h2s'.
+			communitySuits: null # Community suits string e.g. 'cdhs'.
+			communityVals: null  # Sorted numerical face values of community cards.
+			faces: null          # Faces string e.g. AA.
+			hand: null           # Hand string e.g. AcAs.
+			monster: false       # Is this hand a complete monster?
+			pair: false          # Is this hand a pair?
+			playable: false      # Is the hand playable?
+			pos: null            # Current position, index of posNames.
+			suits: null          # Suits string e.g. cs.
+			vals: [ 0, 0 ]       # Sorted numerical face value of cards in hand.
 
 	## Instance Vars
 
@@ -68,9 +71,12 @@ module.exports = class
 
 	# Determine some useful info about the game, assign to @state.
 	analyse: (game) ->
-		{ betting, self: { cards, chips, position }, players, state: round } = game
+		{ betting, community, self: { cards, chips, position }, players, state: round } = game
 
 		@state.betting = betting
+		@state.community = community.sort().join('')
+		@state.communitySuits = (s for s in @state.community[1...] by 2).sort().join('')
+		@state.communityVals = (@handVals[v] for v in @state.community by 2)
 
 		# Easier to play with the hand as a string e.g. 'AcAs'
 		@state.hand = hand = cards.sort().join('')

@@ -95,6 +95,9 @@ describe "Charlie's instance variables", ->
 				'betting'
 				'bb'
 				'chips'
+				'community'
+				'communitySuits'
+				'communityVals'
 				'faces'
 				'hand'
 				'monster'
@@ -111,6 +114,9 @@ describe "Charlie's instance variables", ->
 			(state.betting ? {}).should.be.an('object')
 			(state.bb ? 0).should.be.a('number')
 			(state.chips ? 0).should.be.a('number')
+			(state.community ? '').should.be.a('string')
+			(state.communitySuits ? '').should.be.a('string')
+			(state.communityVals ? []).should.be.an('array')
 			(state.faces ? '').should.be.a('string')
 			(state.hand ? '').should.be.a('string')
 			(state.monster ? false).should.be.a('boolean')
