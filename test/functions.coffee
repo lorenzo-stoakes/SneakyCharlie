@@ -31,8 +31,18 @@ argsToArray = (args) ->
 	return Array.prototype.slice.call(args, 0)
 
 # Helper function to set charlie up to have the specified hand.
-# TODO: Might be worthwhile transferring to Charlie himself.
-setCharlie = (charlie, hand) ->
+# TODO: Move to Charlie himself.
+setCharlie = (charlie, hand, community = '') ->
+	charlie.state.community = community
+
+	if community == ''
+		charlie.state.communitySuits = ''
+		charlie.state.communityVals = []
+	else
+		# TODO: De-duplicate from Charlie.analyse.
+		charlie.state.communitySuits = (s for s in community[1...] by 2).sort().join('')
+		charlie.state.communityVals = (charlie.handVals[v] for v in community by 2)
+
 	charlie.state.hand = hand
 
 	[ face1, suit1, face2, suit2 ] = hand
