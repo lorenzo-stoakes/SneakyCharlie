@@ -157,6 +157,24 @@ module.exports = class
 		else
 			@pos.mp
 
+	# Does the specified suit string contain a straight? Returns the suit or false if no flush
+	# exists.
+	containsFlush: (suits) ->
+		return false if suits == ''
+		suits.sort()
+
+		prev = suits[0]
+		count = 1
+
+		for curr in suits[1...]
+			if curr == prev
+				count++
+			else
+				count = 1
+
+			return curr if count == 5
+
+		return false
 	# Determine what the big blind is.
 	# TODO: Necessary/useful?
 	getBigBlind: (players) ->

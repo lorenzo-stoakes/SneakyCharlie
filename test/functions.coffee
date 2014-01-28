@@ -180,6 +180,35 @@ describe "Charlie's function", ->
 				calcPos(n, i).should.equal(p) for p, i in table
 				table.splice(4, 0, pos.mp)
 
+	describe 'containsFlush', ->
+		charlie = new Charlie()
+
+		# Detects flushes in 5, 6, and 7 card hands.
+
+		# Flush suit.
+		for f in allSuits
+			suits = [ f, f, f, f, f ]
+
+			it "detects a #{f} flush in 5 cards", ->
+				charlie.containsFlush(suits).should.equal(f)
+
+			for o1 in allSuits
+				for o2 in allSuits
+					for i in [0...6]
+						suits.splice(i, 0, o1)
+
+						it "detects a #{f} flush in 6 cards", ->
+							charlie.containsFlush(suits).should.equal(f)
+
+						suits.splice(i, 1)
+
+						for j in [0...7]
+							suits.splice(j, 0, o2)
+
+							it "detects a #{f} flush in 7 cards", ->
+								charlie.containsFlush(suits).should.equal(f)
+
+							suits.splice(j, 1)
 	describe 'inRange', ->
 		charlie = new Charlie()
 		inRange = charlie.inRange.bind(charlie)
