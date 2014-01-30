@@ -30,6 +30,21 @@ for face1, i in allFaces
 argsToArray = (args) ->
 	return Array.prototype.slice.call(args, 0)
 
+# Helper function to generate permutations choosing n elements.
+permute = (set, n, allowDupes=false) ->
+	return ([ x ] for x in set) if n == 1
+	return set if set.length <= 1
+
+	ret = []
+
+	for el, i in set
+		set.splice(i, 1) if !allowDupes
+		for list in permute(set, n-1, true)
+			ret.push([ el ].concat(list))
+		set.splice(i, 0, el) if !allowDupes
+
+	return ret
+
 # Helper function to set charlie up to have the specified hand.
 # TODO: Move to Charlie himself.
 setCharlie = (charlie, hand, community = '') ->
