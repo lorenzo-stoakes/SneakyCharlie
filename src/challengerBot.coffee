@@ -161,18 +161,14 @@ module.exports = class
 	# exists.
 	containsFlush: (suits) ->
 		return false if suits == ''
-		suits.sort()
 
-		prev = suits[0]
-		count = 1
+		countsBySuit = {}
 
-		for curr in suits[1...]
-			if curr == prev
-				count++
-			else
-				count = 1
+		for suit in suits
+			n = countsBySuit[suit] ? 0
+			countsBySuit[suit] = ++n
 
-			return curr if count == 5
+			return suit if n == 5
 
 		return false
 	# Determine what the big blind is.
