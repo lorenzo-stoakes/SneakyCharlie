@@ -295,15 +295,15 @@ describe "Charlie's function", ->
 		charlie.inRange.should.be.a('function')
 		inRange = charlie.inRange.bind(charlie)
 
-		_.each allFaces, (face1, i) ->
-			_.each allFaces[i...], (face2) ->
-				range = "#{face1}#{face2}"
-				rangePair = range[0] == range[1]
-				_.each allHands, (hand) ->
-					# Only consider 5% of hands if quick mode is activated.
-					return if QUICK and Math.random() > 0.05
+		it 'detects correct ranges for each possible face combination', ->
+			_.each allFaces, (face1, i) ->
+				_.each allFaces[i...], (face2) ->
+					range = "#{face1}#{face2}"
+					rangePair = range[0] == range[1]
+					_.each allHands, (hand) ->
+						# Only consider 5% of hands if quick mode is activated.
+						return if QUICK and Math.random() > 0.05
 
-					it "detects correctly for range #{range} and hand #{hand}", ->
 						setCharlie(charlie, hand)
 						{ faces, pair, suits } = charlie.state
 
