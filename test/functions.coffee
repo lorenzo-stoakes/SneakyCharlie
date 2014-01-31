@@ -291,7 +291,7 @@ describe "Charlie's function", ->
 		charlie.inRange.should.be.a('function')
 		inRange = charlie.inRange.bind(charlie)
 
-		it 'detects correct ranges for each possible face combination', ->
+		it 'detects correct ranges for each possible face combination + suited/unsuited', ->
 			_.each allFaces, (face1, i) ->
 				_.each allFaces[i...], (face2) ->
 					range = "#{face1}#{face2}"
@@ -319,13 +319,13 @@ describe "Charlie's function", ->
 						# Test with the '+' suffix as well. This should make no difference.
 						inRange(range + '+').should.equal(expected)
 
+						# Test suited ranges - if a pair can't be suited.
 						if !rangePair
-							it 'suited', ->
-								# TODO: Bring suited into Charlie.
-								suited = suits[0] == suits[1]
-								expected = expected and !pair and suited
+							# TODO: Bring suited into Charlie.
+							suited = suits[0] == suits[1]
+							expectedSuited = expected and !pair and suited
 
-								inRange(range + 's').should.equal(expected)
+							inRange(range + 's').should.equal(expectedSuited)
 
 	describe 'getBigBlind', ->
 		it 'should return the biggest blind any player possesses.', ->
