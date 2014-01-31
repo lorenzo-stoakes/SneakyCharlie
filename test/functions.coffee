@@ -224,6 +224,21 @@ describe "Charlie's function", ->
 
 								suits.splice(j, 1)
 
+		do ->
+			for n in [1..4]
+				for suits in permute(allSuits, n, true)
+					it "doesn't detect flushes in 1-4 cards", ->
+						charlie.containsFlush(suits).should.equal(false)
+
+		do ->
+			for n in [5..7]
+				for suits in permute(allSuits, n, true)
+					counts = _.countBy(suits, (s) -> s)
+					continue if n >= 5 for s, n of counts
+
+					it "doesn't detect flushes in 5-7 cards with < 5 of same suit", ->
+						charlie.containsFlush(suits).should.equal(false)
+
 	describe 'inRange', ->
 		charlie = new Charlie()
 		inRange = charlie.inRange.bind(charlie)
