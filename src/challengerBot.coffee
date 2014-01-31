@@ -171,6 +171,38 @@ module.exports = class
 			return suit if n == 5
 
 		return false
+
+	# Does the specified face values array contain a straight? Returns the high card or false
+	# if no straight exists.
+	containsStraight: (vals) ->
+		# Can't have a straight if less than 5 cards.
+		return false if vals.length < 5
+
+		# Aces count as value 1 and 14.
+		for val in vals when val is @handVals.A
+			vals = vals.concat(1)
+			break
+
+		# TODO: Would likely be more efficient to use a counting sort (as in the test :P) -
+		# O(n) vs. O(n log n) - but since the number of vals is low, this is something to
+		# benchmark (constant factors could dominate.) Investigate.
+
+		@sortNum(vals)
+
+		hits = 1
+		prev = vals[0]
+		for val in vals[1...]
+			if val == prev + 1
+				hits++
+			else if val != prev
+				hits = 1
+
+			return val if hits == 5
+
+			prev = val
+
+		return false
+
 	# Determine what the big blind is.
 	# TODO: Necessary/useful?
 	getBigBlind: (players) ->
