@@ -39,7 +39,7 @@ permute = (set, n, allowDupes=false) ->
 
 	for el, i in set
 		set.splice(i, 1) if !allowDupes
-		for list in permute(set, n-1, true)
+		for list in permute(set, n-1, allowDupes)
 			ret.push([ el ].concat(list))
 		set.splice(i, 0, el) if !allowDupes
 
