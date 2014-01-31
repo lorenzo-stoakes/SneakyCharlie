@@ -241,8 +241,8 @@ describe "Charlie's function", ->
 
 	describe 'inRange', ->
 		charlie = new Charlie()
+		charlie.inRange.should.be.a('function')
 		inRange = charlie.inRange.bind(charlie)
-		inRange.should.be.a('function')
 
 		_.each allFaces, (face1, i) ->
 			_.each allFaces[i...], (face2) ->
