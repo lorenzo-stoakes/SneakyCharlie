@@ -238,6 +238,58 @@ describe "Charlie's function", ->
 
 					it "doesn't detect flushes in 5-7 cards with < 5 of same suit", ->
 						charlie.containsFlush(suits).should.be.false
+	describe 'containsStraight', ->
+		charlie = new Charlie()
+
+		charlie.containsStraight.should.be.a('function')
+		containsStraight = charlie.containsStraight.bind(charlie)
+
+		it 'should not recognise a straight when there are less than 5 cards', ->
+			containsStraight(_.sample([ 2..14 ], n)).should.be.false for n in [1..4]
+
+		it 'should detect all straights correctly, include the wheel', ->
+			for vals in permute([2..14], 5, true)
+				# Only consider 5% of hands if quick mode is activated.
+				if QUICK and Math.random() > 0.05
+					continue
+
+				# Use a counting sort -
+				counts = new Uint8Array(14 + 1)
+
+				# To avoid running excessive numbers of test cases, randomly add extra cards so we
+				# check 5,6,7-card hands 1/3 of the time each.
+				extras = _.random(0, 2)
+				for i in [0...extras]
+					vals.push(_.random(2, 14))
+
+				invalid = false
+				for val in vals
+					n = ++counts[val]
+					invalid = true if n > 4
+
+				# Ignore invalid hands.
+				continue if invalid
+
+				straight = false
+				max = -1
+
+				streak = 0
+				for count, val in counts
+					if count == 0
+						streak = 0
+					else
+						streak++
+						max = val if val > max
+
+					isWheel = val == 5 and streak == 4 and counts[14] > 0
+					if streak == 5 or isWheel
+						straight = true
+						break
+
+				if straight
+					containsStraight(vals).should.equal(max)
+				else
+					containsStraight(vals).should.be.false
 
 	describe 'inRange', ->
 		charlie = new Charlie()
