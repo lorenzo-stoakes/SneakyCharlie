@@ -217,7 +217,9 @@ module.exports = class
 		# We don't care about the + suffix as it is decorative and implied. Only an 's' suffix
 		# vs. 'o' or missing suffix is meaningful.
 		rangeSuited = 's' in range[2...]
-		return false if rangeSuited and !pair and suits[0] != suits[1]
+
+		# If pair or suits don't match, then definitely not in suited range.
+		return false if rangeSuited and (pair or suits[0] != suits[1])
 
 		# Expected numerical vals from range.
 		expectedVals = (@handVals[r] for r in range[...2])
