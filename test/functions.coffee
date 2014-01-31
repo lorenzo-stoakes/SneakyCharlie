@@ -237,7 +237,7 @@ describe "Charlie's function", ->
 					continue if n >= 5 for s, n of counts
 
 					it "doesn't detect flushes in 5-7 cards with < 5 of same suit", ->
-						charlie.containsFlush(suits).should.equal(false)
+						charlie.containsFlush(suits).should.be.false
 
 	describe 'inRange', ->
 		charlie = new Charlie()
