@@ -404,11 +404,12 @@ describe "Charlie's function", ->
 			charlie.preflopBet().should.equal(charlie.specialBet.checkFold)
 
 	describe 'postflopBet', ->
-		it 'plays 4*BB if hand is playable', ->
+		it 'plays 4*min. raise if hand is playable and first betting round', ->
 			charlie = new Charlie()
-			charlie.state.bb = 7
-
+			charlie.state.betting = raise: 7
+			charlie.state.bettingRound = 1
 			charlie.state.playable = true
+
 			charlie.postflopBet().should.equal(28)
 
 		it 'check/folds if not playable', ->

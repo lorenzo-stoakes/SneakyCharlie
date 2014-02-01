@@ -265,8 +265,8 @@ module.exports = class
 
 	# Given the current state of the game, how much should we bet postflop?
 	postflopBet: ->
-		if @state.playable
-			4 * @state.bb
+		if @state.playable and @state.bettingRound == 1
+			4 * @state.betting.raise
 		else
 			@specialBet.checkFold
 
