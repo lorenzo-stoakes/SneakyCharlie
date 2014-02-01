@@ -24,6 +24,7 @@ module.exports = class
 			pokerHand: null      # What is our current poker hand?
 			pokerVal: 0          # The 'value' of our poker hand, i.e. high card.
 			pos: null            # Current position, index of posNames.
+			previousRound: null  # The previous round.
 			round: null          # The current round e.g. pre-flop, flop, etc.
 			suits: null          # Suits string e.g. cs.
 			vals: [ 0, 0 ]       # Sorted numerical face value of cards in hand.
@@ -124,6 +125,7 @@ module.exports = class
 
 		@state.playable = false
 
+		@state.previousRound = @state.round
 		@state.round = round
 
 		if round == 'pre-flop'
