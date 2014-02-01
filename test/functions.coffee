@@ -76,6 +76,12 @@ getGameData = ->
 	# Deep clones objects.
 	return _.clone(_gameData, true)
 
+# Helper function to Helper function designed to avoid running excessive numbers of test cases.
+# Randomly adds extra cards so we check 5,6,7-card hands 1/3 of the time each.
+addExtra = (vals) ->
+	extras = _.random(0, 2)
+	vals.push(_.random(2, 14)) for i in [ 0...extras ]
+
 describe "Charlie's function", ->
 	describe 'analyse', ->
 		charlie = new Charlie()
@@ -288,11 +294,7 @@ describe "Charlie's function", ->
 				# Use a counting sort -
 				counts = new Uint8Array(14 + 1)
 
-				# To avoid running excessive numbers of test cases, randomly add extra cards so we
-				# check 5,6,7-card hands 1/3 of the time each.
-				extras = _.random(0, 2)
-				for i in [0...extras]
-					vals.push(_.random(2, 14))
+				addExtra(vals)
 
 				invalid = false
 				for val in vals
