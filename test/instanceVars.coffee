@@ -140,8 +140,8 @@ describe "Charlie's instance variables", ->
 
 		it 'should contain only expected keys', ->
 			state.should.have.keys [
-				'betting'
 				'bb'
+				'betting'
 				'chips'
 				'community'
 				'communitySuits'
