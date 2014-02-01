@@ -162,6 +162,33 @@ describe "Charlie's function", ->
 		it 'should have set the correct round', ->
 			state.round.should.equal('flop')
 
+	describe 'analyse rounds', ->
+		charlie = new Charlie()
+		analyse = charlie.analyse.bind(charlie)
+		gameData = getGameData()
+		gameData.state = 'pre-flop'
+		analyse(gameData)
+		{ state } = charlie
+
+		it 'should set round, previousRound and bettingRound state values correctly', ->
+			_.isNull(state.previousRound).should.equal(true)
+			state.round.should.equal('pre-flop')
+			state.bettingRound.should.equal(1)
+
+			analyse(gameData)
+
+			state.previousRound.should.equal('pre-flop')
+			state.round.should.equal('pre-flop')
+			state.bettingRound.should.equal(2)
+
+			gameData.state = 'flop'
+
+			analyse(gameData)
+
+			state.previousRound.should.equal('pre-flop')
+			state.round.should.equal('flop')
+			state.bettingRound.should.equal(1)
+
 	describe 'calcPos', ->
 		charlie = new Charlie()
 		{ pos } = charlie
