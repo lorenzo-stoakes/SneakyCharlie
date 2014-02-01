@@ -142,6 +142,7 @@ describe "Charlie's instance variables", ->
 			state.should.have.keys [
 				'bb'
 				'betting'
+				'bettingRound'
 				'chips'
 				'community'
 				'communitySuits'
@@ -164,6 +165,7 @@ describe "Charlie's instance variables", ->
 
 		it 'should have keys of expected type', ->
 			(state.betting ? {}).should.be.an('object')
+			(state.bettingRound ? 0).should.be.a('number')
 			(state.bb ? 0).should.be.a('number')
 			(state.chips ? 0).should.be.a('number')
 			(state.community ? '').should.be.a('string')

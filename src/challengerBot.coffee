@@ -12,6 +12,7 @@ module.exports = class
 		@state =
 			bb: null             # Current big blind.
 			betting: null        # Current betting state of game.
+			bettingRound: 0      # Current *betting* round i.e. the number of raises - 1.
 			chips: 0             # Number of chips Charlie currently has.
 			community: null      # Community cards string, e.g. 'Ac3d5h2s'.
 			communitySuits: null # Community suits string e.g. 'cdhs'.
@@ -127,6 +128,12 @@ module.exports = class
 
 		@state.previousRound = @state.round
 		@state.round = round
+
+		# If still the same round, then this is the next betting round.
+		if @state.previousRound == round
+			@state.bettingRound++
+		else
+			@state.bettingRound = 1
 
 		if round == 'pre-flop'
 			for range in @preflopRanges[currPos] when @inRange(range)
