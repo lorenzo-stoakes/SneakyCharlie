@@ -152,6 +152,9 @@ describe "Charlie's function", ->
 		it "shouldn't mark the hand as a pair", ->
 			state.pair.should.equal(false)
 
+		it 'should have set the correct round', ->
+			state.round.should.equal('flop')
+
 	describe 'calcPos', ->
 		charlie = new Charlie()
 		{ pos } = charlie

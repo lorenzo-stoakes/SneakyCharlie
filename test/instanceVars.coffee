@@ -154,6 +154,7 @@ describe "Charlie's instance variables", ->
 				'pokerHand'
 				'pokerVal'
 				'pos'
+				'round'
 				'suits'
 				'vals'
 			]
@@ -175,6 +176,7 @@ describe "Charlie's instance variables", ->
 			(state.pokerHand ? 0).should.be.an('number')
 			(state.pokerVal ? 0).should.be.an('number')
 			(state.pos ? 0).should.be.a('number')
+			(state.round ? '').should.be.a('string')
 			(state.suits ? '').should.be.a('string')
 			vals.should.be.an('array')
 
