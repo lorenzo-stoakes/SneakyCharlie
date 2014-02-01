@@ -5,7 +5,7 @@ require('chai').should()
 Charlie = require('../src/challengerBot')
 
 # Use example game data from JsPoker README.
-gameData = JSON.parse(fs.readFileSync(__dirname + '/GameData.json'))
+_gameData = JSON.parse(fs.readFileSync(__dirname + '/GameData.json'))
 
 # If ALL_TESTS not set run a subset in sane time, otherwise it takes several seconds.
 QUICK = !process.env.ALL_TESTS
@@ -71,6 +71,11 @@ setCharlie = (charlie, hand, community = '') ->
 	charlie.state.monster = faces in [ 'AA', 'KK' ]
 	charlie.state.pair = face1 == face2
 
+# Helper function to get a copy of game data.
+getGameData = ->
+	# Deep clones objects.
+	return _.clone(_gameData, true)
+
 describe "Charlie's function", ->
 	describe 'analyse', ->
 		charlie = new Charlie()
@@ -96,6 +101,8 @@ describe "Charlie's function", ->
 
 		it 'is a function', ->
 			analyse.should.be.a('function')
+
+		gameData = getGameData()
 
 		analyse(gameData)
 		{ state } = charlie
