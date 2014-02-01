@@ -291,7 +291,7 @@ describe "Charlie's function", ->
 				if QUICK and Math.random() > 0.05
 					continue
 
-				# Use a counting sort -
+				# Use a counting sort.
 				counts = new Uint8Array(14 + 1)
 
 				addExtra(vals)
