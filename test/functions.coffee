@@ -474,6 +474,27 @@ describe "Charlie's function", ->
 
 				classified.vals[0].should.equal(kindVal)
 
+		it 'should correctly return the straight flush value', ->
+			for i in [ 0...TEST_COUNT ]
+				straight = _.random(5, 14)
+
+				if straight == 5
+					vals = [ 2..5 ].concat(14)
+				else
+					vals = [ straight..straight - 4 ]
+
+				vals = _.shuffle(vals)
+
+				suit = _.sample(allSuits)
+				suits = repeat(suit, 5)
+
+				classified = classifyHand(suits, vals)
+				classified.type.should.equal(pokerHand.straightFlush)
+				classified.vals.should.be.an('array')
+				classified.vals.should.be.length(1)
+
+				classified.vals[0].should.equal(straight)
+
 	describe 'containsFlush', ->
 		charlie = new Charlie()
 
