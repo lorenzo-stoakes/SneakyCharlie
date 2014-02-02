@@ -41,7 +41,7 @@ module.exports = class
 		# http://www.youtube.com/watch?v=29xJRc329eI
 		name: 'SneakyCharlie'
 		email: 'lstoakes@gmail.com'
-		btcWallet: '1EyBrQTnHGiKNwqFcSBn9Ua4KX1t8gQjet'
+		btcWallet: '1NtpjxBCDi1uNHJHBnXkNh41foxWxFNzvn'
 
 	# Map between poker hands and their value.
 	pokerHand:
