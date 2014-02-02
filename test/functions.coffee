@@ -270,6 +270,8 @@ describe "Charlie's function", ->
 
 	describe 'classifyHand', ->
 		charlie = new Charlie()
+		charlie.classifyHand.should.be.a('function')
+		classifyHand = charlie.classifyHand.bind(charlie)
 
 		typeCounts = new Uint32Array(9)
 
@@ -277,7 +279,7 @@ describe "Charlie's function", ->
 			vals = _.map(cardSet, (c) -> 2 + (c % 13))
 			suits = _.map(cardSet, (c) -> allSuits[Math.floor(c / 13)]).join('')
 
-			classified = charlie.classifyHand(suits, vals)
+			classified = classifyHand(suits, vals)
 
 			typeCounts[classified.type]++
 
