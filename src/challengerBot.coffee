@@ -170,6 +170,15 @@ module.exports = class
 		else
 			@pos.mp
 
+	# Determines the poker hand type, i.e. high card, pair, etc. input suits and vals should be
+	# synchronised. Returns an object with type set to the pokerhand type and vals set to the
+	# high card value(s).
+	classifyHand: (suits, vals) ->
+		return {
+			type: @pokerHand.highCard
+			vals: [ 14 ]
+		}
+
 	# Does the specified suit string contain a straight? Returns the suit or false if no flush
 	# exists.
 	containsFlush: (suits) ->
