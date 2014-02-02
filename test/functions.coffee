@@ -316,6 +316,10 @@ describe "Charlie's function", ->
 			classified = classifyHand('dddsdd', [ 7, 8, 9, 10, 11, 4 ])
 			classified.type.should.equal(charlie.pokerHand.flush)
 
+		it "shouldn't detect a straight flush with a different straight and a different flush containing the wheel.", ->
+			classified = classifyHand('dddsddc', [ 2, 3, 4, 5, 14, 9, 2 ])
+			classified.type.should.equal(charlie.pokerHand.flush)
+
 	describe 'containsFlush', ->
 		charlie = new Charlie()
 
