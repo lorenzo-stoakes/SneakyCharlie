@@ -78,9 +78,22 @@ getGameData = ->
 
 # Helper function to Helper function designed to avoid running excessive numbers of test cases.
 # Randomly adds extra cards so we check 5,6,7-card hands 1/3 of the time each.
-addExtra = (vals) ->
-	extras = _.random(0, 2)
-	vals.push(_.random(2, 14)) for i in [ 0...extras ]
+addExtra = (vals, noDupes = false, count = 2) ->
+	valHash = {}
+	if noDupes
+		valHash[v] = true for v in vals
+
+	extras = _.random(0, count)
+	for i in [ 0...extras ]
+		n = _.random(2, 14)
+
+		if noDupes
+			while valHash[n]
+				n = _.random(2, 14)
+
+			valHash[n] = true
+
+		vals.push(n)
 
 describe "Charlie's function", ->
 	describe 'analyse', ->
