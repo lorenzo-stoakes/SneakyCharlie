@@ -289,6 +289,46 @@ describe "Charlie's function", ->
 
 					charlie.containsFlush(suits).should.be.false
 
+	describe 'containsNofaKind', ->
+		charlie = new Charlie()
+
+		charlie.containsNofaKind.should.be.a('function')
+		containsNofaKind = charlie.containsNofaKind.bind(charlie)
+
+		it 'should not find any matches when no values duplicated', ->
+			for vals in permute([ 2..14 ], 5, false)
+				addExtra(vals, true)
+				containsNofaKind(vals).should.be.false
+
+		# Helper function to assert that the containsNofaKind function finds all of the input
+		# array's 'N-of-kinds', e.g. findsNofaKind([ 2, 3 ]) finds all full houses.
+		findsNofaKind = (counts) ->
+			# We only need to permute sum(c - 1 for each c in counts).
+			permuteCount = _.reduce(counts, ((s, c) -> s - c + 1), 5)
+
+			for vals in permute([ 2..14 ], permuteCount, false)
+				addExtra(vals, true)
+
+				pairVals = _.sample(vals, counts.length)
+
+				expected = {}
+				for count, i in counts
+					pairVal = pairVals[i]
+					expected[pairVal] = count
+
+					for j in [ 0...count - 1 ]
+						index = _.random(vals.length)
+
+						vals.splice(index, 0, pairVal)
+
+				containsNofaKind(vals).should.eql(expected)
+
+		it 'should find pairs', -> findsNofaKind([ 2 ])
+		it 'should find 2 pairs', -> findsNofaKind([ 2, 2 ])
+		it 'should find 3-of-a-kinds', -> findsNofaKind([ 3 ])
+		it 'should find 4-of-a-kinds', -> findsNofaKind([ 4 ])
+		it 'should find full houses', -> findsNofaKind([ 2, 3 ])
+
 	describe 'containsStraight', ->
 		charlie = new Charlie()
 

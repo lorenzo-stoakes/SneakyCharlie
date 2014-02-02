@@ -185,6 +185,25 @@ module.exports = class
 
 		return false
 
+	# Does the specified face values array contain n-of-a-kind where n is between 2 and 4,
+	# i.e. pair, 3-of-a-kind, 4-of-a-kind? This function returns an object mapping face values
+	# to their counts where they exceed 1. This means this function detects 2-pairs and full
+	# houses as well as pairs + 3-4 kinds. Returns false if no cards 'of a kind' detected.
+	containsNofaKind: (vals) ->
+		# 14 + 1 as we want to actually address index 14.
+		tmp = new Uint8Array(14 + 1)
+
+		ret = false
+
+		for val in vals
+			n = ++tmp[val]
+
+			if n > 1
+				ret = {} if !ret
+				ret[val] = n
+
+		return ret
+
 	# Does the specified face values array contain a straight? Returns the high card or false
 	# if no straight exists.
 	containsStraight: (vals) ->
