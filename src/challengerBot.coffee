@@ -23,7 +23,7 @@ module.exports = class
 			pair: false          # Is this hand a pair?
 			playable: false      # Is the hand playable?
 			pokerHand: null      # What is our current poker hand?
-			pokerVal: 0          # The 'value' of our poker hand, i.e. high card.
+			pokerVals: null      # The 'values' of our poker hand, i.e. high card(s).
 			pos: null            # Current position, index of posNames.
 			previousRound: null  # The previous round.
 			round: null          # The current round e.g. pre-flop, flop, etc.
