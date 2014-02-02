@@ -147,6 +147,14 @@ module.exports = class
 		# Do we have a pair in our hand?
 		@state.pair = faces[0] == faces[1]
 
+		if @state.round != 'pre-flop'
+			allSuits = @state.suits.concat(@state.communitySuits)
+			allVals = @state.vals.concat(@state.communityVals)
+
+			classified = @classifyHand(allSuits, allVals)
+			@state.pokerHand = classified.type
+			@state.pokerVals = classified.vals
+
 	# Calculate a more useful representation of position.
 	calcPos: (playerCount, positionId) ->
 		# 0 == sb so adjust such that 0 = button.

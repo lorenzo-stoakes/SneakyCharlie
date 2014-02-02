@@ -200,6 +200,12 @@ describe "Charlie's function", ->
 		it 'should have set the correct round', ->
 			state.round.should.equal('flop')
 
+		it 'should have set the correct poker hand', ->
+			state.pokerHand.should.equal(charlie.pokerHand.highCard)
+
+		it 'should have set the correct hand value', ->
+			state.pokerVals.should.eql([ 13 ])
+
 	describe 'analyse rounds', ->
 		charlie = new Charlie()
 		analyse = charlie.analyse.bind(charlie)
