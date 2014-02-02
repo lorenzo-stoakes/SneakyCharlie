@@ -179,7 +179,7 @@ module.exports = class
 			vals: [ 14 ]
 		}
 
-	# Does the specified suit string contain a straight? Returns the suit or false if no flush
+	# Does the specified suit string contain a flush? Returns the suit or false if no flush
 	# exists.
 	containsFlush: (suits) ->
 		return false if suits == ''
