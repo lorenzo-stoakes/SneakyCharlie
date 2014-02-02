@@ -360,6 +360,27 @@ describe "Charlie's function", ->
 
 				classified.vals[0].should.equal(pairVal)
 
+		it 'should correctly return the 2-pair values', ->
+			for i in [ 0...TEST_COUNT ]
+				cardCount = _.random(5, 7)
+
+				vals = _.sample([ 2...14 ], cardCount)
+				max = vals[1] = vals[0]
+				min = vals[3] = vals[2]
+
+				[ min, max ] = [ max, min ] if max < min
+
+				if charlie.containsStraight(vals)
+					i--
+					continue
+
+				classified = classifyHand('cshdcsh'[ 0...cardCount ], vals)
+				classified.type.should.equal(pokerHand.twoPair)
+				classified.vals.should.be.an('array')
+				classified.vals.should.be.length(2)
+
+				classified.vals.should.eql([ max, min ])
+
 	describe 'containsFlush', ->
 		charlie = new Charlie()
 
