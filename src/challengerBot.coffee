@@ -144,7 +144,7 @@ module.exports = class
 
 		# Do we have a monster hand?
 		@state.monster = faces in [ 'AA', 'KK' ]
-		# Do we have a pair?
+		# Do we have a pair in our hand?
 		@state.pair = faces[0] == faces[1]
 
 	# Calculate a more useful representation of position.
