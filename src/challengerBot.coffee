@@ -1,8 +1,6 @@
 # A class representing the Sneaky Charlie JsPoker bot. As per the rules, all functionality is
 # kept in a single module.
 module.exports = class
-	maxArr = (arr) -> Math.max.apply(null, arr)
-
 	constructor: ->
 		# Assign position 'enum'.
 		@pos[p] = i for p, i in @posNames
@@ -215,7 +213,7 @@ module.exports = class
 		if twos? and threes?
 			return {
 				type: @pokerHand.fullHouse
-				vals: [ maxArr(threes), maxArr(twos) ]
+				vals: [ @maxArr(threes), @maxArr(twos) ]
 			}
 
 		if flush
@@ -238,7 +236,7 @@ module.exports = class
 		if threes?
 			return {
 				type: @pokerHand.threeKind
-				vals: [ maxArr(threes) ]
+				vals: [ @maxArr(threes) ]
 			}
 
 		if twos?
@@ -260,7 +258,7 @@ module.exports = class
 		if !ofKind
 			return {
 				type: @pokerHand.highCard
-				vals: [ maxArr(vals) ]
+				vals: [ @maxArr(vals) ]
 			}
 
 		# We shouldn't get here :)
@@ -390,6 +388,10 @@ module.exports = class
 		# expectation.
 
 		return vals[0] >= expectedVals[0] and vals[1] >= expectedVals[1]
+
+	# Find max. value in an array.
+	maxArr: (arr) ->
+		Math.max.apply(null, arr)
 
 	# Given the current state of the game, how much should we bet preflop?
 	preflopBet: ->
