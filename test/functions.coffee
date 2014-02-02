@@ -364,7 +364,7 @@ describe "Charlie's function", ->
 		containsNofaKind = charlie.containsNofaKind.bind(charlie)
 
 		it 'should not find any matches when no values duplicated', ->
-			for vals in permute([ 2..14 ], 5, false)
+			for vals in permute([ 2..14 ], 5)
 				addExtra(vals, true)
 				containsNofaKind(vals).should.be.false
 
@@ -374,7 +374,7 @@ describe "Charlie's function", ->
 			# We only need to permute sum(c - 1 for each c in counts).
 			permuteCount = _.reduce(counts, ((s, c) -> s - c + 1), 5)
 
-			for vals in permute([ 2..14 ], permuteCount, false)
+			for vals in permute([ 2..14 ], permuteCount)
 				addExtra(vals, true)
 
 				pairVals = _.sample(vals, counts.length)
