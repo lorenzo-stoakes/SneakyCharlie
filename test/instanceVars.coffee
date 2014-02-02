@@ -176,7 +176,7 @@ describe "Charlie's instance variables", ->
 			(state.monster ? false).should.be.a('boolean')
 			(state.pair ? false).should.be.a('boolean')
 			(state.playable ? false).should.be.a('boolean')
-			(state.pokerHand ? 0).should.be.an('number')
+			(state.pokerHand ? 0).should.be.a('number')
 			(state.pokerVals ? []).should.be.an('array')
 			(state.pos ? 0).should.be.a('number')
 			(state.previousRound ? '').should.be.a('string')
