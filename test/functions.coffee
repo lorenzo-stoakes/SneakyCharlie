@@ -442,6 +442,23 @@ describe "Charlie's function", ->
 
 				classified.vals[0].should.equal(maxVal)
 
+		it 'should correctly return the full house values', ->
+			for i in [ 0...TEST_COUNT ]
+				cardCount = _.random(5, 7)
+
+				vals = _.sample([ 2...14 ], cardCount)
+				over = vals[2] = vals[1] = vals[0]
+				under = vals[4] = vals[3]
+
+				vals = _.shuffle(vals)
+
+				classified = classifyHand('cshdcsh'[ 0...cardCount ], vals)
+				classified.type.should.equal(pokerHand.fullHouse)
+				classified.vals.should.be.an('array')
+				classified.vals.should.be.length(2)
+
+				classified.vals.should.eql([ over, under ])
+
 	describe 'containsFlush', ->
 		charlie = new Charlie()
 
