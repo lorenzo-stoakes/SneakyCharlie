@@ -403,20 +403,26 @@ module.exports = class
 
 	# Given the current state of the game, how much should we bet preflop?
 	preflopBet: ->
-		switch
-			# All-in if we have AA, KK.
-			when @state.monster then @state.chips
-			# If other pair, 4*min raise.
-			when @state.playable then 4 * @state.betting.raise
-			# Otherwise, we have to be careful Charlie! Throw that 72o away!
-			else @specialBet.checkFold
+		if @state.monster
+			return @state.chips
+		else if @state.playable
+			if @state.bettingRound == 1
+				return 4 * @state.betting.raise
+			else
+				return @state.betting.call
+
+		# Otherwise, we have to be careful Charlie! Throw that 72o away!
+		return @specialBet.checkFold
 
 	# Given the current state of the game, how much should we bet postflop?
 	postflopBet: ->
-		if @state.playable and @state.bettingRound == 1
+		if !@state.playable
+			return @specialBet.checkFold
+
+		if @state.bettingRound == 1
 			4 * @state.betting.raise
 		else
-			@specialBet.checkFold
+			@state.betting.call
 
 	# Javascript abominates sorting, force numerical sort.
 	sortNum: (ns) ->

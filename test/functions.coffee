@@ -705,12 +705,25 @@ describe "Charlie's function", ->
 			charlie.state.playable = false
 			charlie.preflopBet().should.equal(100)
 
-		it 'plays 4*minimum raise with a playable hand', ->
+		it 'plays 4*minimum raise with a playable hand and first betting round', ->
 			charlie = new Charlie()
+
+			charlie.state.bettingRound = 1
+
 			charlie.state.betting = raise: 15
 			charlie.state.playable = true
 
 			charlie.preflopBet().should.equal(60)
+
+		it 'calls with a playable hand after first betting round', ->
+			charlie = new Charlie()
+
+			charlie.state.bettingRound = 2
+
+			charlie.state.betting = call: 17
+			charlie.state.playable = true
+
+			charlie.preflopBet().should.equal(17)
 
 		it 'check/folds if neither playable nor monster', ->
 			charlie = new Charlie()
@@ -725,6 +738,16 @@ describe "Charlie's function", ->
 			charlie.state.playable = true
 
 			charlie.postflopBet().should.equal(28)
+
+		it 'calls with a playable hand after first betting round', ->
+			charlie = new Charlie()
+
+			charlie.state.bettingRound = 2
+
+			charlie.state.betting = call: 17
+			charlie.state.playable = true
+
+			charlie.postflopBet().should.equal(17)
 
 		it 'check/folds if not playable', ->
 			charlie = new Charlie()
