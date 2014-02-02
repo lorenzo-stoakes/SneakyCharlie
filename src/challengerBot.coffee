@@ -176,10 +176,95 @@ module.exports = class
 	# synchronised. Returns an object with type set to the pokerhand type and vals set to the
 	# high card value(s).
 	classifyHand: (suits, vals) ->
-		return {
-			type: @pokerHand.highCard
-			vals: [ 14 ]
-		}
+		flush = @containsFlush(suits)
+		straight = @containsStraight(vals)
+
+		# Some special handling needed to avoid situations where > 5 cards have a separate
+		# flush and straight.
+		if flush and straight
+			valid = true
+
+			# Handle cases where there are separate straights and flushes.
+			if vals.length > 5
+				suitHash = {}
+				suitHash[val] = suits[i] for val, i in vals
+				# Handle wheel.
+				suitHash[1] = suitHash[14]
+
+				for val in [ straight...straight - 5 ] when suitHash[val] != flush
+					valid = false
+					break
+
+			if valid
+				return {
+					type: @pokerHand.straightFlush
+					vals: [ straight ]
+				}
+
+		ofKind = @containsNofaKind(vals)
+
+		if (four = ofKind.countToVals?[4])?
+			return {
+				type: @pokerHand.fourKind
+				vals: [ four ]
+			}
+
+		twos = ofKind.countToVals?[2]
+		threes = ofKind.countToVals?[3]
+
+		if twos? and threes?
+			return {
+				type: @pokerHand.fullHouse
+				vals: [ maxArr(threes), maxArr(twos) ]
+			}
+
+		if flush
+			max = -1
+
+			for val, i in vals when suits[i] == flush and val > max
+				max = val
+
+			return {
+				type: @pokerHand.flush
+				vals: [ max ]
+			}
+
+		if straight
+			return {
+				type: @pokerHand.straight
+				vals: [ straight ]
+			}
+
+		if threes?
+			return {
+				type: @pokerHand.threeKind
+				vals: [ maxArr(threes) ]
+			}
+
+		if twos?
+			len = twos.length
+
+			if len == 1
+				return {
+					type: @pokerHand.pair
+					vals: [ twos[0] ]
+				}
+
+			@sortNum(twos)
+
+			return {
+				type: @pokerHand.twoPair
+				vals: [ twos[len - 1], twos[len - 2] ]
+			}
+
+		if !ofKind
+			return {
+				type: @pokerHand.highCard
+				vals: [ 14 ]
+			}
+
+		# We shouldn't get here :)
+		throw new Error('Invalid ofKind state.')
 
 	# Does the specified suit string contain a flush? Returns the suit or false if no flush
 	# exists.
