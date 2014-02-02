@@ -129,8 +129,6 @@ describe "Charlie's function", ->
 		getBigBlindArgs = null
 
 		# Stub out some functions.
-		charlie.sortNum = ->
-			sortNumArgs = argsToArray(arguments)
 
 		charlie.calcPos = ->
 			calcPosArgs = argsToArray(arguments)
@@ -177,9 +175,6 @@ describe "Charlie's function", ->
 
 		it 'should have set the correct vals', ->
 			state.vals.should.eql([ 4, 11 ])
-
-		it 'should have called sortNum with expected inputs', ->
-			sortNumArgs.should.eql([ [ 4, 11 ] ])
 
 		it 'should have called calcPos with expected inputs', ->
 			calcPosArgs.should.eql([ 6, 4 ])
