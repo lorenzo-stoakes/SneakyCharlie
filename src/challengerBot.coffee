@@ -213,8 +213,8 @@ module.exports = class
 
 		return ret
 
-	# Does the specified face values array contain a straight? Returns the high card or false
-	# if no straight exists.
+	# Does the specified face values array contain a straight? Returns the high card value or
+	# false if no straight exists.
 	containsStraight: (vals) ->
 		# Can't have a straight if less than 5 cards.
 		return false if vals.length < 5
