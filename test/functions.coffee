@@ -381,6 +381,24 @@ describe "Charlie's function", ->
 
 				classified.vals.should.eql([ max, min ])
 
+		it 'should correctly return the 3-of-a-kind value', ->
+			for i in [ 0...TEST_COUNT ]
+				cardCount = _.random(5, 7)
+
+				vals = _.sample([ 2...14 ], cardCount)
+				kindVal = vals[0] = vals[1] = vals[2]
+
+				if charlie.containsStraight(vals)
+					i--
+					continue
+
+				classified = classifyHand('cshdcsh'[ 0...cardCount ], vals)
+				classified.type.should.equal(pokerHand.threeKind)
+				classified.vals.should.be.an('array')
+				classified.vals.should.be.length(1)
+
+				classified.vals[0].should.equal(kindVal)
+
 	describe 'containsFlush', ->
 		charlie = new Charlie()
 
