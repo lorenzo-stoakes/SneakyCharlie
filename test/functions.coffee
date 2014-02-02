@@ -380,15 +380,28 @@ describe "Charlie's function", ->
 
 				pairVals = _.sample(vals, counts.length)
 
-				expected = {}
+				expected =
+					valToCount: {}
+					countToVals: {}
+
 				for count, i in counts
 					pairVal = pairVals[i]
-					expected[pairVal] = count
+					expected.valToCount[pairVal] = count
+
+					countToVals = expected.countToVals[count]
+
+					if !countToVals?
+						expected.countToVals[count] = countToVals = []
+
+					countToVals.push(pairVal)
 
 					for j in [ 0...count - 1 ]
 						index = _.random(vals.length)
 
 						vals.splice(index, 0, pairVal)
+
+				for count, expectedVals of expected.countToVals
+					charlie.sortNum(expectedVals)
 
 				containsNofaKind(vals).should.eql(expected)
 

@@ -196,20 +196,43 @@ module.exports = class
 
 	# Does the specified face values array contain n-of-a-kind where n is between 2 and 4,
 	# i.e. pair, 3-of-a-kind, 4-of-a-kind? This function returns an object mapping face values
-	# to their counts where they exceed 1. This means this function detects 2-pairs and full
-	# houses as well as pairs + 3-4 kinds. Returns false if no cards 'of a kind' detected.
+	# to their counts (where they exceed 1), and vice-versa. This means this function detects
+	# 2-pairs and full houses as well as pairs + 3-4 kinds. Returns false if no cards 'of a
+	# kind' detected.
 	containsNofaKind: (vals) ->
 		# 14 + 1 as we want to actually address index 14.
 		tmp = new Uint8Array(14 + 1)
 
-		ret = false
+		ret = null
 
 		for val in vals
-			n = ++tmp[val]
+			count = ++tmp[val]
 
-			if n > 1
-				ret = {} if !ret
-				ret[val] = n
+			if count > 1
+				if !ret?
+					ret =
+						valToCount: {}
+						countToVals: {}
+
+				ret.valToCount[val] = count
+
+		return false if !ret?
+
+		for val, count of ret.valToCount
+			needsSort = false
+
+			# Object keys are always strings in js.
+			val = parseInt(val, 10)
+
+			countToVals = ret.countToVals[count]
+			if !countToVals?
+				ret.countToVals[count] = countToVals = []
+			# Keep sorted.
+			else
+				needsSort = true
+
+			countToVals.push(val)
+			@sortNum(countToVals) if needsSort
 
 		return ret
 
