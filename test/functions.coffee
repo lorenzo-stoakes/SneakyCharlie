@@ -417,6 +417,27 @@ describe "Charlie's function", ->
 
 				classified.vals[0].should.equal(straight)
 
+		it 'should correctly return the flush value', ->
+			for i in [ 0...TEST_COUNT ]
+				cardCount = _.random(5, 7)
+
+				vals = _.sample([ 2...14 ], cardCount)
+
+				if charlie.containsStraight(vals)
+					i--
+					continue
+
+				suit = _.sample(allSuits)
+				suits = repeat(suit, cardCount)
+
+				maxVal = charlie.maxArr(vals)
+
+				classified = classifyHand(suits, vals)
+				classified.type.should.equal(pokerHand.flush)
+				classified.vals.should.be.an('array')
+				classified.vals.should.be.length(1)
+				classified.vals[0].should.equal(maxVal)
+
 	describe 'containsFlush', ->
 		charlie = new Charlie()
 
