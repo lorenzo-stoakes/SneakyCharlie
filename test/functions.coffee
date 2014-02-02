@@ -312,6 +312,10 @@ describe "Charlie's function", ->
 		it 'should detect the correct number of high cards', ->
 			typeCounts[charlie.pokerHand.highCard].should.equal(1302450)
 
+		it "shouldn't detect a straight flush with a different straight and a different flush.", ->
+			classified = classifyHand('dddsdd', [ 7, 8, 9, 10, 11, 4 ])
+			classified.type.should.equal(charlie.pokerHand.flush)
+
 	describe 'containsFlush', ->
 		charlie = new Charlie()
 
