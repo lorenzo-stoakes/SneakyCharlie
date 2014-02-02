@@ -62,6 +62,10 @@ permute = (set, n, allowDupes=false) ->
 
 	return ret
 
+# Helper function to generate a string repeating the character chr n times.
+repeat = (chr, n) ->
+	return new Array(n + 1).join(chr)
+
 # Helper function to set charlie up to have the specified hand.
 # TODO: Move to Charlie himself.
 setCharlie = (charlie, hand, community = '') ->
