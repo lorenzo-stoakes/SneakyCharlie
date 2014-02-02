@@ -268,6 +268,48 @@ describe "Charlie's function", ->
 				calcPos(n, i).should.equal(p) for p, i in table
 				table.splice(4, 0, pos.mp)
 
+	describe 'classifyHand', ->
+		charlie = new Charlie()
+
+		typeCounts = new Uint32Array(9)
+
+		for cardSet in combin([ 0...52 ], 5)
+			vals = _.map(cardSet, (c) -> 2 + (c % 13))
+			suits = _.map(cardSet, (c) -> allSuits[Math.floor(c / 13)]).join('')
+
+			classified = charlie.classifyHand(suits, vals)
+
+			typeCounts[classified.type]++
+
+		# Using counts from http://en.wikipedia.org/wiki/Poker_hands.
+
+		it 'should detect the correct number of straight flushes', ->
+			typeCounts[charlie.pokerHand.straightFlush].should.equal(40)
+
+		it 'should detect the correct number of 4-of-a-kinds', ->
+			typeCounts[charlie.pokerHand.fourKind].should.equal(624)
+
+		it 'should detect the correct number of full houses', ->
+			typeCounts[charlie.pokerHand.fourKind].should.equal(3744)
+
+		it 'should detect the correct number of flushes', ->
+			typeCounts[charlie.pokerHand.flush].should.equal(5148)
+
+		it 'should detect the correct number of straights', ->
+			typeCounts[charlie.pokerHand.straight].should.equal(10240)
+
+		it 'should detect the correct number of 3-of-a-kinds', ->
+			typeCounts[charlie.pokerHand.threeKind].should.equal(54912)
+
+		it 'should detect the correct number of 2 pairs', ->
+			typeCounts[charlie.pokerHand.twoPair].should.equal(123552)
+
+		it 'should detect the correct number of pairs', ->
+			typeCounts[charlie.pokerHand.pair].should.equal(1098240)
+
+		it 'should detect the correct number of high cards', ->
+			typeCounts[charlie.pokerHand.highCard].should.equal(1302450)
+
 	describe 'containsFlush', ->
 		charlie = new Charlie()
 
