@@ -280,7 +280,6 @@ describe "Charlie's function", ->
 			suits = _.map(cardSet, (c) -> allSuits[Math.floor(c / 13)]).join('')
 
 			classified = classifyHand(suits, vals)
-
 			typeCounts[classified.type]++
 
 		# Using counts from http://en.wikipedia.org/wiki/Poker_hands.
@@ -310,7 +309,7 @@ describe "Charlie's function", ->
 			typeCounts[charlie.pokerHand.pair].should.equal(1098240)
 
 		it 'should detect the correct number of high cards', ->
-			typeCounts[charlie.pokerHand.highCard].should.equal(1302450)
+			typeCounts[charlie.pokerHand.highCard].should.equal(1302540)
 
 		it "shouldn't detect a straight flush with a different straight and a different flush.", ->
 			classified = classifyHand('dddsdd', [ 7, 8, 9, 10, 11, 4 ])
