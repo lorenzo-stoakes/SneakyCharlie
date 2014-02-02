@@ -370,6 +370,8 @@ describe "Charlie's function", ->
 
 				[ min, max ] = [ max, min ] if max < min
 
+				vals = _.shuffle(vals)
+
 				if charlie.containsStraight(vals)
 					i--
 					continue
