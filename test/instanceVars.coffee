@@ -153,7 +153,9 @@ describe "Charlie's instance variables", ->
 				'pair'
 				'playable'
 				'pokerHand'
+				'pokerHandComm'
 				'pokerVals'
+				'pokerValsComm'
 				'pos'
 				'previousRound'
 				'round'
@@ -177,7 +179,9 @@ describe "Charlie's instance variables", ->
 			(state.pair ? false).should.be.a('boolean')
 			(state.playable ? false).should.be.a('boolean')
 			(state.pokerHand ? 0).should.be.a('number')
+			(state.pokerHandComm ? 0).should.be.a('number')
 			(state.pokerVals ? []).should.be.an('array')
+			(state.pokerValsComm ? []).should.be.an('array')
 			(state.pos ? 0).should.be.a('number')
 			(state.previousRound ? '').should.be.a('string')
 			(state.round ? '').should.be.a('string')

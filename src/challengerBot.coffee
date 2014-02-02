@@ -23,7 +23,9 @@ module.exports = class
 			pair: false          # Is this hand a pair?
 			playable: false      # Is the hand playable?
 			pokerHand: null      # What is our current poker hand?
+			pokerHandComm: null  # What is the community poker hand?
 			pokerVals: null      # The 'values' of our poker hand, i.e. high card(s).
+			pokerValsComm: null  # The 'values' of the community poker hand.
 			pos: null            # Current position, index of posNames.
 			previousRound: null  # The previous round.
 			round: null          # The current round e.g. pre-flop, flop, etc.
@@ -154,6 +156,10 @@ module.exports = class
 			classified = @classifyHand(allSuits, allVals)
 			@state.pokerHand = classified.type
 			@state.pokerVals = classified.vals
+
+			classifiedComm = @classifyHand(@state.communitySuits, @state.communityVals)
+			@state.pokerHandComm = classifiedComm.type
+			@state.pokerValsComm = classifiedComm.vals
 
 	# Calculate a more useful representation of position.
 	calcPos: (playerCount, positionId) ->
