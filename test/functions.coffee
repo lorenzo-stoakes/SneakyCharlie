@@ -720,6 +720,7 @@ describe "Charlie's function", ->
 		it 'plays 4*minimum raise if hand is playable and first betting round', ->
 			charlie = new Charlie()
 			charlie.state.betting = raise: 7
+
 			charlie.state.bettingRound = 1
 			charlie.state.playable = true
 
