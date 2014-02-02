@@ -387,6 +387,7 @@ describe "Charlie's function", ->
 
 				vals = _.sample([ 2...14 ], cardCount)
 				kindVal = vals[0] = vals[1] = vals[2]
+				vals = _.shuffle(vals)
 
 				if charlie.containsStraight(vals)
 					i--
