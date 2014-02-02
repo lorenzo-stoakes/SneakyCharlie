@@ -201,10 +201,10 @@ module.exports = class
 
 		ofKind = @containsNofaKind(vals)
 
-		if (four = ofKind.countToVals?[4])?
+		if (fours = ofKind.countToVals?[4])?
 			return {
 				type: @pokerHand.fourKind
-				vals: [ four ]
+				vals: fours
 			}
 
 		twos = ofKind.countToVals?[2]
