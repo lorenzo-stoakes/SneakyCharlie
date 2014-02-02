@@ -282,42 +282,44 @@ describe "Charlie's function", ->
 			classified = classifyHand(suits, vals)
 			typeCounts[classified.type]++
 
+		{ pokerHand } = charlie
+
 		# Using counts from http://en.wikipedia.org/wiki/Poker_hands.
 
 		it 'should detect the correct number of straight flushes', ->
-			typeCounts[charlie.pokerHand.straightFlush].should.equal(40)
+			typeCounts[pokerHand.straightFlush].should.equal(40)
 
 		it 'should detect the correct number of 4-of-a-kinds', ->
-			typeCounts[charlie.pokerHand.fourKind].should.equal(624)
+			typeCounts[pokerHand.fourKind].should.equal(624)
 
 		it 'should detect the correct number of full houses', ->
-			typeCounts[charlie.pokerHand.fullHouse].should.equal(3744)
+			typeCounts[pokerHand.fullHouse].should.equal(3744)
 
 		it 'should detect the correct number of flushes', ->
-			typeCounts[charlie.pokerHand.flush].should.equal(5108)
+			typeCounts[pokerHand.flush].should.equal(5108)
 
 		it 'should detect the correct number of straights', ->
-			typeCounts[charlie.pokerHand.straight].should.equal(10200)
+			typeCounts[pokerHand.straight].should.equal(10200)
 
 		it 'should detect the correct number of 3-of-a-kinds', ->
-			typeCounts[charlie.pokerHand.threeKind].should.equal(54912)
+			typeCounts[pokerHand.threeKind].should.equal(54912)
 
 		it 'should detect the correct number of 2 pairs', ->
-			typeCounts[charlie.pokerHand.twoPair].should.equal(123552)
+			typeCounts[pokerHand.twoPair].should.equal(123552)
 
 		it 'should detect the correct number of pairs', ->
-			typeCounts[charlie.pokerHand.pair].should.equal(1098240)
+			typeCounts[pokerHand.pair].should.equal(1098240)
 
 		it 'should detect the correct number of high cards', ->
-			typeCounts[charlie.pokerHand.highCard].should.equal(1302540)
+			typeCounts[pokerHand.highCard].should.equal(1302540)
 
 		it "shouldn't detect a straight flush with a different straight and a different flush.", ->
 			classified = classifyHand('dddsdd', [ 7, 8, 9, 10, 11, 4 ])
-			classified.type.should.equal(charlie.pokerHand.flush)
+			classified.type.should.equal(pokerHand.flush)
 
 		it "shouldn't detect a straight flush with a different straight and a different flush containing the wheel.", ->
 			classified = classifyHand('dddsddc', [ 2, 3, 4, 5, 14, 9, 2 ])
-			classified.type.should.equal(charlie.pokerHand.flush)
+			classified.type.should.equal(pokerHand.flush)
 
 	describe 'containsFlush', ->
 		charlie = new Charlie()
