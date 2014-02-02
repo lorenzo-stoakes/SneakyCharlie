@@ -245,7 +245,7 @@ module.exports = class
 			if len == 1
 				return {
 					type: @pokerHand.pair
-					vals: [ twos[0] ]
+					vals: twos
 				}
 
 			@sortNum(twos)
