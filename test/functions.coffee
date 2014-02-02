@@ -10,6 +10,9 @@ _gameData = JSON.parse(fs.readFileSync(__dirname + '/GameData.json'))
 # If ALL_TESTS not set run a subset in sane time, otherwise it takes several seconds.
 QUICK = !process.env.ALL_TESTS
 
+# The number of times we repeat some randomly generated tests.
+TEST_COUNT = 1e3
+
 allFaces = _.map([ 2..9 ], (n) -> '' + n)
 allFaces = allFaces.concat([ 'T', 'J', 'Q', 'K', 'A' ])
 allSuits = [ 'h', 'd', 's', 'c' ]
@@ -324,6 +327,20 @@ describe "Charlie's function", ->
 		it "shouldn't detect a straight flush with a different straight and a different flush containing the wheel.", ->
 			classified = classifyHand('dddsddc', [ 2, 3, 4, 5, 14, 9, 2 ])
 			classified.type.should.equal(pokerHand.flush)
+
+		it 'should correctly return the high card value', ->
+			for i in [ 0...TEST_COUNT ]
+				vals = _.sample([ 2...14 ], _.random(5, 7))
+
+				if charlie.containsStraight(vals)
+					i--
+					continue
+
+				classified = classifyHand('cshdc', vals)
+				classified.type.should.equal(pokerHand.highCard)
+				classified.vals.should.be.an('array')
+				classified.vals.should.be.length(1)
+				classified.vals[0].should.equal(charlie.maxArr(vals))
 
 	describe 'containsFlush', ->
 		charlie = new Charlie()
