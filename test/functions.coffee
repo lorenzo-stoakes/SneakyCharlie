@@ -291,7 +291,7 @@ describe "Charlie's function", ->
 			typeCounts[charlie.pokerHand.fourKind].should.equal(624)
 
 		it 'should detect the correct number of full houses', ->
-			typeCounts[charlie.pokerHand.fourKind].should.equal(3744)
+			typeCounts[charlie.pokerHand.fullHouse].should.equal(3744)
 
 		it 'should detect the correct number of flushes', ->
 			typeCounts[charlie.pokerHand.flush].should.equal(5108)
