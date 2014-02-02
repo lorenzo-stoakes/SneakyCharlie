@@ -30,6 +30,23 @@ for face1, i in allFaces
 argsToArray = (args) ->
 	return Array.prototype.slice.call(args, 0)
 
+# Helper function to generate all combinations of n elements of input set.
+combin = (set, n) ->
+	len = set.length
+
+	return null if n <= 0 or len == 0
+
+	ret = []
+
+	# The number of elements prefixing results.
+	prefixLen = len - n + 1
+
+	for el, i in set[...prefixLen]
+		for suffix in combin(set[i + 1...], n - 1) ? [[]]
+			ret.push([ el ].concat(suffix))
+
+	return ret
+
 # Helper function to generate permutations choosing n elements.
 permute = (set, n, allowDupes=false) ->
 	return ([ x ] for x in set) if n == 1
