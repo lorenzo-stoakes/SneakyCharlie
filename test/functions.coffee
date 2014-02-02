@@ -437,6 +437,7 @@ describe "Charlie's function", ->
 				classified.type.should.equal(pokerHand.flush)
 				classified.vals.should.be.an('array')
 				classified.vals.should.be.length(1)
+
 				classified.vals[0].should.equal(maxVal)
 
 	describe 'containsFlush', ->
