@@ -260,7 +260,7 @@ module.exports = class
 		if !ofKind
 			return {
 				type: @pokerHand.highCard
-				vals: [ 14 ]
+				vals: [ maxArr(vals) ]
 			}
 
 		# We shouldn't get here :)
