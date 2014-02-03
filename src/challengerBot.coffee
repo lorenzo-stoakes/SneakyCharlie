@@ -431,7 +431,7 @@ module.exports = class
 			return @state.chips
 		else if @state.playable
 			if @state.bettingRound == 1
-				return 4 * @state.betting.raise
+				return 8 * @state.betting.raise
 			else
 				return @state.betting.call
 
@@ -444,7 +444,7 @@ module.exports = class
 			return @specialBet.checkFold
 
 		if @state.bettingRound == 1
-			4 * @state.betting.raise
+			8 * @state.betting.raise
 		else
 			@state.betting.call
 

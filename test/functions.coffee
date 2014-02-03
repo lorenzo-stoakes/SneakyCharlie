@@ -738,7 +738,7 @@ describe "Charlie's function", ->
 			charlie.state.playable = false
 			charlie.preflopBet().should.equal(100)
 
-		it 'plays 4*minimum raise with a playable hand and first betting round', ->
+		it 'plays 8*minimum raise with a playable hand and first betting round', ->
 			charlie = new Charlie()
 
 			charlie.state.bettingRound = 1
@@ -746,7 +746,7 @@ describe "Charlie's function", ->
 			charlie.state.betting = raise: 15
 			charlie.state.playable = true
 
-			charlie.preflopBet().should.equal(60)
+			charlie.preflopBet().should.equal(8 * 15)
 
 		it 'calls with a playable hand after first betting round', ->
 			charlie = new Charlie()
@@ -763,14 +763,14 @@ describe "Charlie's function", ->
 			charlie.preflopBet().should.equal(charlie.specialBet.checkFold)
 
 	describe 'postflopBet', ->
-		it 'plays 4*minimum raise if hand is playable and first betting round', ->
+		it 'plays 8*minimum raise if hand is playable and first betting round', ->
 			charlie = new Charlie()
 			charlie.state.betting = raise: 7
 
 			charlie.state.bettingRound = 1
 			charlie.state.playable = true
 
-			charlie.postflopBet().should.equal(28)
+			charlie.postflopBet().should.equal(8 * 7)
 
 		it 'calls with a playable hand after first betting round', ->
 			charlie = new Charlie()
