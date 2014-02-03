@@ -327,11 +327,11 @@ describe "Charlie's function", ->
 		it 'should detect the correct number of high cards', ->
 			typeCounts[pokerHand.highCard].should.equal(1302540)
 
-		it "shouldn't detect a straight flush with a different straight and a different flush.", ->
+		it "shouldn't detect a straight flush with a different straight and a different flush", ->
 			classified = classifyHand('dddsdd', [ 7, 8, 9, 10, 11, 4 ])
 			classified.type.should.equal(pokerHand.flush)
 
-		it "shouldn't detect a straight flush with a different straight and a different flush containing the wheel.", ->
+		it "shouldn't detect a straight flush with a different straight and a different flush containing the wheel", ->
 			classified = classifyHand('dddsddc', [ 2, 3, 4, 5, 14, 9, 2 ])
 			classified.type.should.equal(pokerHand.flush)
 
@@ -766,5 +766,5 @@ describe "Charlie's function", ->
 		ns = [ 10, 3, 1, 100, 11 ]
 		sorted = [ 1, 3, 10, 11, 100 ]
 
-		it 'sorts an array numerically.', ->
+		it 'sorts an array numerically', ->
 			Charlie::sortNum(ns).should.eql(sorted)
