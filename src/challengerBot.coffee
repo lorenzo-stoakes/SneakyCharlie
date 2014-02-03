@@ -230,6 +230,15 @@ module.exports = class
 				vals: [ @maxArr(threes), @maxArr(twos) ]
 			}
 
+		# Handle case where the hand has >1 3 count - it's a full house not 3-of-a-kind :-)
+		if threes? and (len = threes.length) > 1
+			@sortNum(threes)
+
+			return {
+				type: @pokerHand.fullHouse
+				vals: [ threes[len - 1], threes[len - 2] ]
+			}
+
 		if flush
 			max = -1
 

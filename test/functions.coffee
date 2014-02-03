@@ -335,6 +335,10 @@ describe "Charlie's function", ->
 			classified = classifyHand('dddsddc', [ 2, 3, 4, 5, 14, 9, 2 ])
 			classified.type.should.equal(pokerHand.flush)
 
+		it "shouldn't detect 3-of-a-kind when there are 2 sets of 3 - this is a full house", ->
+			classified = classifyHand('hdcshd', [ 2, 2, 2, 3, 3, 3 ])
+			classified.type.should.equal(pokerHand.fullHouse)
+
 		it 'should correctly return the high card value', ->
 			for i in [ 0...TEST_COUNT ]
 				vals = _.sample([ 2...14 ], _.random(5, 7))
