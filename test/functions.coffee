@@ -810,6 +810,15 @@ describe "Charlie's function", ->
 
 			charlie.postflopBet().should.equal(17)
 
+		it 'goes all-in if the hand is playable and a monster', ->
+			charlie = new Charlie()
+			charlie.state.chips = 12345
+			charlie.state.bettingRound = 1
+			charlie.state.monster = true
+			charlie.state.playable = true
+
+			charlie.postflopBet().should.equal(12345)
+
 		it 'check/folds if not playable', ->
 			charlie = new Charlie()
 			charlie.state.bb = 7

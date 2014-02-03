@@ -446,6 +446,9 @@ module.exports = class
 		if !@state.playable
 			return @specialBet.checkFold
 
+		if @state.monster
+			return @state.chips
+
 		if @state.bettingRound == 1
 			8 * @state.betting.raise
 		else
