@@ -137,12 +137,13 @@ module.exports = class
 		else
 			@state.bettingRound = 1
 
-		# Do we have a monster hand?
-		@state.monster = faces in [ 'AA', 'KK' ]
 		# Do we have a pair in our hand?
 		@state.pair = faces[0] == faces[1]
 
 		if round == 'pre-flop'
+			# Do we have a pre-flop monster hand?
+			@state.monster = faces in [ 'AA', 'KK' ]
+
 			for range in @preflopRanges[currPos] when @inRange(range)
 				@state.playable = true
 				break
