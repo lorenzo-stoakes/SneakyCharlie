@@ -262,6 +262,34 @@ describe "Charlie's function", ->
 
 			charlie.state.playable.should.be.false
 
+		it 'should mark the hand as playable and a monster if full house or better', ->
+			charlie = new Charlie()
+			gameData = getGameData()
+
+			gameData.self.cards = [ 'Ac', 'Ad' ]
+			gameData.community = [ 'Ah', 'Tc', '7c', '4c', 'Ts' ]
+
+			charlie.analyse(gameData)
+
+			charlie.state.playable.should.be.true
+			charlie.state.monster.should.be.true
+
+			gameData.community = [ 'Ah', 'Tc', '7c', '4c', 'As' ]
+
+			charlie = new Charlie()
+			charlie.analyse(gameData)
+
+			charlie.state.playable.should.be.true
+			charlie.state.monster.should.be.true
+
+			gameData.community = [ '9h', 'Tc', '7c', '4c', 'As' ]
+
+			charlie = new Charlie()
+			charlie.analyse(gameData)
+
+			charlie.state.playable.should.be.true
+			charlie.state.monster.should.be.false
+
 	describe 'calcPos', ->
 		charlie = new Charlie()
 		{ pos } = charlie

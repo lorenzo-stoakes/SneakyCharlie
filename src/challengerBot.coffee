@@ -170,6 +170,8 @@ module.exports = class
 					break
 
 			@state.playable = superior
+			@state.monster = superior and @state.pokerHand >= @pokerHand.fullHouse
+
 
 	# Calculate a more useful representation of position.
 	calcPos: (playerCount, positionId) ->
