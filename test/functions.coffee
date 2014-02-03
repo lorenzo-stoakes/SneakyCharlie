@@ -188,8 +188,8 @@ describe "Charlie's function", ->
 		it 'should have assigned bb with the result from getBigBlind', ->
 			state.bb.should.equal(17)
 
-		it 'should have marked this postflop play as playable', ->
-			state.playable.should.equal(true)
+		it 'should have marked this postflop play as not playable', ->
+			state.playable.should.equal(false)
 
 		it "shouldn't mark the hand as a monster", ->
 			state.monster.should.equal(false)
