@@ -239,6 +239,29 @@ describe "Charlie's function", ->
 			state.round.should.equal('flop')
 			state.bettingRound.should.equal(1)
 
+	describe 'analyse postflop playable', ->
+		it 'should mark postflop playable if hand is 3 of a kind or better and better than the community hand', ->
+			charlie = new Charlie()
+			gameData = getGameData()
+
+			gameData.state = 'river'
+			gameData.self.cards = [ '3c', 'Ac' ]
+			gameData.community = [ 'Kc', 'Tc', '7c', '4c', '8c' ]
+			charlie.analyse(gameData)
+
+			charlie.state.playable.should.be.true
+
+		it 'should mark postflop non-playable if hand is 3 of a kind or better and the community hand is better', ->
+			charlie = new Charlie()
+			gameData = getGameData()
+
+			gameData.state = 'river'
+			gameData.self.cards = [ '3c', '6c' ]
+			gameData.community = [ 'Kc', 'Tc', '7c', '4c', '8c' ]
+			charlie.analyse(gameData)
+
+			charlie.state.playable.should.be.false
+
 	describe 'calcPos', ->
 		charlie = new Charlie()
 		{ pos } = charlie

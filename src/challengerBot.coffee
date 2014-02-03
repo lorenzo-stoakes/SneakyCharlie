@@ -137,19 +137,16 @@ module.exports = class
 		else
 			@state.bettingRound = 1
 
-		if round == 'pre-flop'
-			for range in @preflopRanges[currPos] when @inRange(range)
-				@state.playable = true
-				break
-		else
-			@state.playable = true
-
 		# Do we have a monster hand?
 		@state.monster = faces in [ 'AA', 'KK' ]
 		# Do we have a pair in our hand?
 		@state.pair = faces[0] == faces[1]
 
-		if @state.round != 'pre-flop'
+		if round == 'pre-flop'
+			for range in @preflopRanges[currPos] when @inRange(range)
+				@state.playable = true
+				break
+		else
 			allSuits = @state.suits.concat(@state.communitySuits)
 			allVals = @state.vals.concat(@state.communityVals)
 
@@ -160,6 +157,18 @@ module.exports = class
 			classifiedComm = @classifyHand(@state.communitySuits, @state.communityVals)
 			@state.pokerHandComm = classifiedComm.type
 			@state.pokerValsComm = classifiedComm.vals
+
+			superior = @state.pokerHand >= @pokerHand.threeKind
+			superior = superior and @state.pokerHand >= @state.pokerHandComm
+
+			# If same hand as community, check whether we're better on high card(s).
+			if superior and @state.pokerHand == @state.pokerHandComm
+				superior = false
+				for highVal, i in @state.pokerVals when highVal > @state.pokerValsComm[i]
+					superior = true
+					break
+
+			@state.playable = superior
 
 	# Calculate a more useful representation of position.
 	calcPos: (playerCount, positionId) ->
