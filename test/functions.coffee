@@ -251,12 +251,12 @@ describe "Charlie's function", ->
 
 			charlie.state.playable.should.be.true
 
-		it 'should mark postflop non-playable if hand is 3 of a kind or better and the community hand is better', ->
+		it "should mark postflop non-playable if hand is 3 of a kind or better and our high card is no better than the community's.", ->
 			charlie = new Charlie()
 			gameData = getGameData()
 
 			gameData.state = 'river'
-			gameData.self.cards = [ '3c', '6c' ]
+			gameData.self.cards = [ '3c', '2c' ]
 			gameData.community = [ 'Kc', 'Tc', '7c', '4c', '8c' ]
 			charlie.analyse(gameData)
 
