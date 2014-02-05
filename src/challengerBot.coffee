@@ -252,14 +252,15 @@ module.exports = class
 			}
 
 		if flush
-			max = -1
-
-			for val, i in vals when suits[i] == flush and val > max
-				max = val
+			# Players could have lower-than-flop higher value cards, so return all to
+			# differentiate.
+			flushVals = (v for v, i in vals when suits[i] == flush)
+			@sortNum(flushVals)
+			flushVals.reverse()
 
 			return {
 				type: @pokerHand.flush
-				vals: [ max ]
+				vals: flushVals[0...5]
 			}
 
 		if straight

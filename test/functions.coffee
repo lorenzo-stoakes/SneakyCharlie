@@ -495,14 +495,14 @@ describe "Charlie's function", ->
 				suit = _.sample(allSuits)
 				suits = repeat(suit, cardCount)
 
-				maxVal = charlie.maxArr(vals)
-
 				classified = classifyHand(suits, vals)
 				classified.type.should.equal(pokerHand.flush)
 				classified.vals.should.be.an('array')
-				classified.vals.should.be.length(1)
+				charlie.sortNum(vals)
+				vals.reverse()
+				vals = vals[...5]
 
-				classified.vals[0].should.equal(maxVal)
+				classified.vals.should.eql(vals)
 
 		it 'should correctly return the full house values', ->
 			for i in [ 0...TEST_COUNT ]
