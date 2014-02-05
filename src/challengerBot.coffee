@@ -165,7 +165,8 @@ module.exports = class
 			# If same hand as community, check whether we're better on high card(s).
 			if superior and @state.pokerHand == @state.pokerHandComm
 				superior = false
-				for highVal, i in @state.pokerVals when highVal > @state.pokerValsComm[i]
+
+				for v, i in @state.pokerVals when v > @state.pokerValsComm[i]
 					superior = true
 					break
 
