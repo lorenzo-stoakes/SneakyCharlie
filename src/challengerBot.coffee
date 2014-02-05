@@ -173,7 +173,6 @@ module.exports = class
 			@state.playable = superior
 			@state.monster = superior and @state.pokerHand >= @pokerHand.fullHouse
 
-
 	# Calculate a more useful representation of position.
 	calcPos: (playerCount, positionId) ->
 		# 0 == sb so adjust such that 0 = button.
