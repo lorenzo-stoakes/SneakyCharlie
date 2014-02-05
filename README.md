@@ -14,6 +14,7 @@ all.
 
 ## Versions ##
 
+* 0.1.1 - Fixed issue with flush valuation, we should consider all card face values to avoid missing a winning hand that has lower face values than the flop.
 * 0.1.0 - Won round 7 of JsPoker, highly limited post-flop analysis but full + well-tested ability to recognise hands.
 
 [0]:https://github.com/mdp/JsPoker
