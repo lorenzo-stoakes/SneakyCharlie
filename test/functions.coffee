@@ -119,716 +119,715 @@ addExtra = (vals, noDupes = false, count = 2) ->
 
 		vals.push(n)
 
-describe "Charlie's function", ->
-	describe 'analyse', ->
-		charlie = new Charlie()
-		analyse = charlie.analyse.bind(charlie)
+describe 'analyse', ->
+	charlie = new Charlie()
+	analyse = charlie.analyse.bind(charlie)
 
-		sortNumArgs = null
-		calcPosArgs = null
-		getBigBlindArgs = null
+	sortNumArgs = null
+	calcPosArgs = null
+	getBigBlindArgs = null
 
-		# Stub out some functions.
+	# Stub out some functions.
 
-		charlie.calcPos = ->
-			calcPosArgs = argsToArray(arguments)
+	charlie.calcPos = ->
+		calcPosArgs = argsToArray(arguments)
 
-			return charlie.pos.co
+		return charlie.pos.co
 
-		charlie.getBigBlind = ->
-			getBigBlindArgs = argsToArray(arguments)
+	charlie.getBigBlind = ->
+		getBigBlindArgs = argsToArray(arguments)
 
-			return 17
+		return 17
 
-		it 'is a function', ->
-			analyse.should.be.a('function')
+	it 'is a function', ->
+		analyse.should.be.a('function')
 
-		gameData = getGameData()
+	gameData = getGameData()
+
+	analyse(gameData)
+	{ state } = charlie
+
+	it 'should set betting equal to input betting', ->
+		state.betting.should.eql(gameData.betting)
+
+	it 'should set the correct community cards', ->
+		state.community.should.equal('5c9sKh')
+
+	it 'should set the correct community suits', ->
+		state.communitySuits.should.equal('chs')
+
+	it 'should set the correct community vals', ->
+		state.communityVals.should.eql([ 5, 9, 13 ])
+
+	it 'should have set the correct hand', ->
+		state.hand.should.equal('4sJd')
+
+	it 'should have set the correct faces', ->
+		state.faces.should.equal('4J')
+
+	# TODO: Perhaps sort?
+	it 'should have set the correct suits', ->
+		state.suits.should.equal('sd')
+
+	it 'should have set the correct number of chips', ->
+		state.chips.should.equal(490)
+
+	it 'should have set the correct vals', ->
+		state.vals.should.eql([ 4, 11 ])
+
+	it 'should have called calcPos with expected inputs', ->
+		calcPosArgs.should.eql([ 6, 4 ])
+
+	it 'should have assigned pos using the result from calcPos', ->
+		state.pos.should.equal(charlie.pos.co)
+
+	it 'should have called getBigBlind with expected inputs', ->
+		getBigBlindArgs.should.eql([ gameData.players ])
+
+	it 'should have assigned bb with the result from getBigBlind', ->
+		state.bb.should.equal(17)
+
+	it 'should have marked this postflop play as not playable', ->
+		state.playable.should.equal(false)
+
+	it "shouldn't mark the hand as a monster", ->
+		state.monster.should.equal(false)
+
+	it "shouldn't mark the hand as a pair", ->
+		state.pair.should.equal(false)
+
+	it 'should have set the correct round', ->
+		state.round.should.equal('flop')
+
+	it 'should have set the correct poker hand', ->
+		state.pokerHand.should.equal(charlie.pokerHand.highCard)
+
+	it 'should have set the correct hand value', ->
+		state.pokerVals.should.eql([ 13 ])
+
+	it 'should have set the correct community poker hand', ->
+		state.pokerHandComm.should.equal(charlie.pokerHand.highCard)
+
+	it 'should have set the correct community hand value', ->
+		state.pokerValsComm.should.eql([ 13 ])
+
+describe 'analyse rounds', ->
+	charlie = new Charlie()
+	analyse = charlie.analyse.bind(charlie)
+	gameData = getGameData()
+	gameData.state = 'pre-flop'
+	analyse(gameData)
+	{ state } = charlie
+
+	it 'should set round, previousRound and bettingRound state values correctly', ->
+		_.isNull(state.previousRound).should.equal(true)
+		state.round.should.equal('pre-flop')
+		state.bettingRound.should.equal(1)
 
 		analyse(gameData)
-		{ state } = charlie
 
-		it 'should set betting equal to input betting', ->
-			state.betting.should.eql(gameData.betting)
+		state.previousRound.should.equal('pre-flop')
+		state.round.should.equal('pre-flop')
+		state.bettingRound.should.equal(2)
 
-		it 'should set the correct community cards', ->
-			state.community.should.equal('5c9sKh')
+		gameData.state = 'flop'
 
-		it 'should set the correct community suits', ->
-			state.communitySuits.should.equal('chs')
-
-		it 'should set the correct community vals', ->
-			state.communityVals.should.eql([ 5, 9, 13 ])
-
-		it 'should have set the correct hand', ->
-			state.hand.should.equal('4sJd')
-
-		it 'should have set the correct faces', ->
-			state.faces.should.equal('4J')
-
-		# TODO: Perhaps sort?
-		it 'should have set the correct suits', ->
-			state.suits.should.equal('sd')
-
-		it 'should have set the correct number of chips', ->
-			state.chips.should.equal(490)
-
-		it 'should have set the correct vals', ->
-			state.vals.should.eql([ 4, 11 ])
-
-		it 'should have called calcPos with expected inputs', ->
-			calcPosArgs.should.eql([ 6, 4 ])
-
-		it 'should have assigned pos using the result from calcPos', ->
-			state.pos.should.equal(charlie.pos.co)
-
-		it 'should have called getBigBlind with expected inputs', ->
-			getBigBlindArgs.should.eql([ gameData.players ])
-
-		it 'should have assigned bb with the result from getBigBlind', ->
-			state.bb.should.equal(17)
-
-		it 'should have marked this postflop play as not playable', ->
-			state.playable.should.equal(false)
-
-		it "shouldn't mark the hand as a monster", ->
-			state.monster.should.equal(false)
-
-		it "shouldn't mark the hand as a pair", ->
-			state.pair.should.equal(false)
-
-		it 'should have set the correct round', ->
-			state.round.should.equal('flop')
-
-		it 'should have set the correct poker hand', ->
-			state.pokerHand.should.equal(charlie.pokerHand.highCard)
-
-		it 'should have set the correct hand value', ->
-			state.pokerVals.should.eql([ 13 ])
-
-		it 'should have set the correct community poker hand', ->
-			state.pokerHandComm.should.equal(charlie.pokerHand.highCard)
-
-		it 'should have set the correct community hand value', ->
-			state.pokerValsComm.should.eql([ 13 ])
-
-	describe 'analyse rounds', ->
-		charlie = new Charlie()
-		analyse = charlie.analyse.bind(charlie)
-		gameData = getGameData()
-		gameData.state = 'pre-flop'
 		analyse(gameData)
-		{ state } = charlie
 
-		it 'should set round, previousRound and bettingRound state values correctly', ->
-			_.isNull(state.previousRound).should.equal(true)
-			state.round.should.equal('pre-flop')
-			state.bettingRound.should.equal(1)
+		state.previousRound.should.equal('pre-flop')
+		state.round.should.equal('flop')
+		state.bettingRound.should.equal(1)
 
-			analyse(gameData)
-
-			state.previousRound.should.equal('pre-flop')
-			state.round.should.equal('pre-flop')
-			state.bettingRound.should.equal(2)
-
-			gameData.state = 'flop'
-
-			analyse(gameData)
-
-			state.previousRound.should.equal('pre-flop')
-			state.round.should.equal('flop')
-			state.bettingRound.should.equal(1)
-
-	describe 'analyse postflop playable', ->
-		it 'should mark postflop playable if hand is 3 of a kind or better and better than the community hand', ->
-			charlie = new Charlie()
-			gameData = getGameData()
-
-			gameData.state = 'river'
-			gameData.self.cards = [ '3c', 'Ac' ]
-			gameData.community = [ 'Kc', 'Tc', '7c', '4c', '8c' ]
-			charlie.analyse(gameData)
-
-			charlie.state.playable.should.be.true
-
-		it "should mark postflop non-playable if hand is 3 of a kind or better and our high card is no better than the community's.", ->
-			charlie = new Charlie()
-			gameData = getGameData()
-
-			gameData.state = 'river'
-			gameData.self.cards = [ '3c', '2c' ]
-			gameData.community = [ 'Kc', 'Tc', '7c', '4c', '8c' ]
-			charlie.analyse(gameData)
-
-			charlie.state.playable.should.be.false
-
-		it 'should mark the hand as playable and a monster if full house or better', ->
-			charlie = new Charlie()
-			gameData = getGameData()
-
-			gameData.self.cards = [ 'Ac', 'Ad' ]
-			gameData.community = [ 'Ah', 'Tc', '7c', '4c', 'Ts' ]
-
-			charlie.analyse(gameData)
-
-			charlie.state.playable.should.be.true
-			charlie.state.monster.should.be.true
-
-			gameData.community = [ 'Ah', 'Tc', '7c', '4c', 'As' ]
-
-			charlie = new Charlie()
-			charlie.analyse(gameData)
-
-			charlie.state.playable.should.be.true
-			charlie.state.monster.should.be.true
-
-			gameData.community = [ '9h', 'Tc', '7c', '4c', 'As' ]
-
-			charlie = new Charlie()
-			charlie.analyse(gameData)
-
-			charlie.state.playable.should.be.true
-			charlie.state.monster.should.be.false
-
-	describe 'calcPos', ->
+describe 'analyse postflop playable', ->
+	it 'should mark postflop playable if hand is 3 of a kind or better and better than the community hand', ->
 		charlie = new Charlie()
-		{ pos } = charlie
-		calcPos = charlie.calcPos.bind(charlie)
+		gameData = getGameData()
 
-		it 'is a function', ->
-			calcPos.should.be.a('function')
+		gameData.state = 'river'
+		gameData.self.cards = [ '3c', 'Ac' ]
+		gameData.community = [ 'Kc', 'Tc', '7c', '4c', '8c' ]
+		charlie.analyse(gameData)
 
-		# Keep in mind in the below that the input positionId is offset by 1 as the game state
-		# position id counts 0 as small blind. The rotate function below achieves this.
-		rotate = (n, i) -> (i + 1) % n
+		charlie.state.playable.should.be.true
 
-		it 'calculates correct positioning', ->
-			# In heads-up you only have the button and the big blind.
-			calcPos(2, rotate(2, pos.button)).should.equal(pos.button)
-			calcPos(2, rotate(2, pos.sb)).should.equal(pos.bb)
-
-		it 'calculates correct positioning for 3 players', ->
-			for p, i in [ pos.sb, pos.bb, pos.button ]
-				calcPos(3, i).should.equal(p)
-
-		it 'calculates correct positioning for 4 players', ->
-			for p, i in [ pos.sb, pos.bb, pos.utg, pos.button ]
-				calcPos(4, i).should.equal(p)
-
-		it 'calculates correct positioning for 5 players', ->
-			for p, i in [ pos.sb, pos.bb, pos.utg, pos.co, pos.button ]
-				calcPos(5, i).should.equal(p)
-
-		it 'calculates correct positioning for 6 players', ->
-			for p, i in [ pos.sb, pos.bb, pos.utg, pos.hj, pos.co, pos.button ]
-				calcPos(6, i).should.equal(p)
-
-		it 'calculates correct positioning for 7 players', ->
-			for p, i in [ pos.sb, pos.bb, pos.utg, pos.mp1, pos.hj, pos.co, pos.button ]
-				calcPos(7, i).should.equal(p)
-
-		it 'calculates correct positioning for 8-12 players', ->
-			table = [ pos.sb, pos.bb, pos.utg, pos.mp1, pos.mp, pos.hj, pos.co, pos.button ]
-			for n in [8..12]
-				calcPos(n, i).should.equal(p) for p, i in table
-				table.splice(4, 0, pos.mp)
-
-	describe 'classifyHand', ->
+	it "should mark postflop non-playable if hand is 3 of a kind or better and our high card is no better than the community's.", ->
 		charlie = new Charlie()
-		charlie.classifyHand.should.be.a('function')
-		classifyHand = charlie.classifyHand.bind(charlie)
+		gameData = getGameData()
 
-		typeCounts = new Uint32Array(9)
+		gameData.state = 'river'
+		gameData.self.cards = [ '3c', '2c' ]
+		gameData.community = [ 'Kc', 'Tc', '7c', '4c', '8c' ]
+		charlie.analyse(gameData)
 
-		for cardSet in combin([ 0...52 ], 5)
-			vals = _.map(cardSet, (c) -> 2 + (c % 13))
-			suits = _.map(cardSet, (c) -> allSuits[Math.floor(c / 13)]).join('')
+		charlie.state.playable.should.be.false
+
+	it 'should mark the hand as playable and a monster if full house or better', ->
+		charlie = new Charlie()
+		gameData = getGameData()
+
+		gameData.self.cards = [ 'Ac', 'Ad' ]
+		gameData.community = [ 'Ah', 'Tc', '7c', '4c', 'Ts' ]
+
+		charlie.analyse(gameData)
+
+		charlie.state.playable.should.be.true
+		charlie.state.monster.should.be.true
+
+		gameData.community = [ 'Ah', 'Tc', '7c', '4c', 'As' ]
+
+		charlie = new Charlie()
+		charlie.analyse(gameData)
+
+		charlie.state.playable.should.be.true
+		charlie.state.monster.should.be.true
+
+		gameData.community = [ '9h', 'Tc', '7c', '4c', 'As' ]
+
+		charlie = new Charlie()
+		charlie.analyse(gameData)
+
+		charlie.state.playable.should.be.true
+		charlie.state.monster.should.be.false
+
+describe 'calcPos', ->
+	charlie = new Charlie()
+	{ pos } = charlie
+	calcPos = charlie.calcPos.bind(charlie)
+
+	it 'is a function', ->
+		calcPos.should.be.a('function')
+
+	# Keep in mind in the below that the input positionId is offset by 1 as the game state
+	# position id counts 0 as small blind. The rotate function below achieves this.
+	rotate = (n, i) -> (i + 1) % n
+
+	it 'calculates correct positioning', ->
+		# In heads-up you only have the button and the big blind.
+		calcPos(2, rotate(2, pos.button)).should.equal(pos.button)
+		calcPos(2, rotate(2, pos.sb)).should.equal(pos.bb)
+
+	it 'calculates correct positioning for 3 players', ->
+		for p, i in [ pos.sb, pos.bb, pos.button ]
+			calcPos(3, i).should.equal(p)
+
+	it 'calculates correct positioning for 4 players', ->
+		for p, i in [ pos.sb, pos.bb, pos.utg, pos.button ]
+			calcPos(4, i).should.equal(p)
+
+	it 'calculates correct positioning for 5 players', ->
+		for p, i in [ pos.sb, pos.bb, pos.utg, pos.co, pos.button ]
+			calcPos(5, i).should.equal(p)
+
+	it 'calculates correct positioning for 6 players', ->
+		for p, i in [ pos.sb, pos.bb, pos.utg, pos.hj, pos.co, pos.button ]
+			calcPos(6, i).should.equal(p)
+
+	it 'calculates correct positioning for 7 players', ->
+		for p, i in [ pos.sb, pos.bb, pos.utg, pos.mp1, pos.hj, pos.co, pos.button ]
+			calcPos(7, i).should.equal(p)
+
+	it 'calculates correct positioning for 8-12 players', ->
+		table = [ pos.sb, pos.bb, pos.utg, pos.mp1, pos.mp, pos.hj, pos.co, pos.button ]
+		for n in [8..12]
+			calcPos(n, i).should.equal(p) for p, i in table
+			table.splice(4, 0, pos.mp)
+
+describe 'classifyHand', ->
+	charlie = new Charlie()
+	charlie.classifyHand.should.be.a('function')
+	classifyHand = charlie.classifyHand.bind(charlie)
+
+	typeCounts = new Uint32Array(9)
+
+	for cardSet in combin([ 0...52 ], 5)
+		vals = _.map(cardSet, (c) -> 2 + (c % 13))
+		suits = _.map(cardSet, (c) -> allSuits[Math.floor(c / 13)]).join('')
+
+		classified = classifyHand(suits, vals)
+		typeCounts[classified.type]++
+
+	{ pokerHand } = charlie
+
+	# Using counts from http://en.wikipedia.org/wiki/Poker_hands.
+
+	it 'should detect the correct number of straight flushes', ->
+		typeCounts[pokerHand.straightFlush].should.equal(40)
+
+	it 'should detect the correct number of 4-of-a-kinds', ->
+		typeCounts[pokerHand.fourKind].should.equal(624)
+
+	it 'should detect the correct number of full houses', ->
+		typeCounts[pokerHand.fullHouse].should.equal(3744)
+
+	it 'should detect the correct number of flushes', ->
+		typeCounts[pokerHand.flush].should.equal(5108)
+
+	it 'should detect the correct number of straights', ->
+		typeCounts[pokerHand.straight].should.equal(10200)
+
+	it 'should detect the correct number of 3-of-a-kinds', ->
+		typeCounts[pokerHand.threeKind].should.equal(54912)
+
+	it 'should detect the correct number of 2 pairs', ->
+		typeCounts[pokerHand.twoPair].should.equal(123552)
+
+	it 'should detect the correct number of pairs', ->
+		typeCounts[pokerHand.pair].should.equal(1098240)
+
+	it 'should detect the correct number of high cards', ->
+		typeCounts[pokerHand.highCard].should.equal(1302540)
+
+	it "shouldn't detect a straight flush with a different straight and a different flush", ->
+		classified = classifyHand('dddsdd', [ 7, 8, 9, 10, 11, 4 ])
+		classified.type.should.equal(pokerHand.flush)
+
+	it "shouldn't detect a straight flush with a different straight and a different flush containing the wheel", ->
+		classified = classifyHand('dddsddc', [ 2, 3, 4, 5, 14, 9, 2 ])
+		classified.type.should.equal(pokerHand.flush)
+
+	it "shouldn't detect 3-of-a-kind when there are 2 sets of 3 - this is a full house", ->
+		classified = classifyHand('hdcshd', [ 2, 2, 2, 3, 3, 3 ])
+		classified.type.should.equal(pokerHand.fullHouse)
+
+	it 'should correctly return the high card value', ->
+		for i in [ 0...TEST_COUNT ]
+			vals = _.sample([ 2...14 ], _.random(5, 7))
+
+			if charlie.containsStraight(vals)
+				i--
+				continue
+
+			classified = classifyHand('cshdc', vals)
+			classified.type.should.equal(pokerHand.highCard)
+			classified.vals.should.be.an('array')
+			classified.vals.should.be.length(1)
+			classified.vals[0].should.equal(charlie.maxArr(vals))
+
+	it 'should correctly return the pair value', ->
+		for i in [ 0...TEST_COUNT ]
+			cardCount = _.random(5, 7)
+
+			vals = _.sample([ 2...14 ], cardCount)
+			pairVal = vals[1] = vals[0]
+
+			if charlie.containsStraight(vals)
+				i--
+				continue
+
+			classified = classifyHand('cshdcsh'[ 0...cardCount ], vals)
+			classified.type.should.equal(pokerHand.pair)
+			classified.vals.should.be.an('array')
+			classified.vals.should.be.length(1)
+
+			classified.vals[0].should.equal(pairVal)
+
+	it 'should correctly return the 2-pair values', ->
+		for i in [ 0...TEST_COUNT ]
+			cardCount = _.random(5, 7)
+
+			vals = _.sample([ 2...14 ], cardCount)
+			max = vals[1] = vals[0]
+			min = vals[3] = vals[2]
+
+			[ min, max ] = [ max, min ] if max < min
+
+			vals = _.shuffle(vals)
+
+			if charlie.containsStraight(vals)
+				i--
+				continue
+
+			classified = classifyHand('cshdcsh'[ 0...cardCount ], vals)
+			classified.type.should.equal(pokerHand.twoPair)
+			classified.vals.should.be.an('array')
+			classified.vals.should.be.length(2)
+
+			classified.vals.should.eql([ max, min ])
+
+	it 'should correctly return the 3-of-a-kind value', ->
+		for i in [ 0...TEST_COUNT ]
+			cardCount = _.random(5, 7)
+
+			vals = _.sample([ 2...14 ], cardCount)
+			kindVal = vals[0] = vals[1] = vals[2]
+			vals = _.shuffle(vals)
+
+			if charlie.containsStraight(vals)
+				i--
+				continue
+
+			classified = classifyHand('cshdcsh'[ 0...cardCount ], vals)
+			classified.type.should.equal(pokerHand.threeKind)
+			classified.vals.should.be.an('array')
+			classified.vals.should.be.length(1)
+
+			classified.vals[0].should.equal(kindVal)
+
+	it 'should correctly return the straight value', ->
+		for i in [ 0...TEST_COUNT ]
+			straight = _.random(5, 14)
+
+			if straight == 5
+				vals = [ 2..5 ].concat(14)
+			else
+				vals = [ straight..straight - 4 ]
+
+			vals = _.shuffle(vals)
+
+			classified = classifyHand('cshdc', vals)
+			classified.type.should.equal(pokerHand.straight)
+			classified.vals.should.be.an('array')
+			classified.vals.should.be.length(1)
+
+			classified.vals[0].should.equal(straight)
+
+	it 'should correctly return the flush value', ->
+		for i in [ 0...TEST_COUNT ]
+			cardCount = _.random(5, 7)
+
+			vals = _.sample([ 2...14 ], cardCount)
+
+			if charlie.containsStraight(vals)
+				i--
+				continue
+
+			suit = _.sample(allSuits)
+			suits = repeat(suit, cardCount)
 
 			classified = classifyHand(suits, vals)
-			typeCounts[classified.type]++
-
-		{ pokerHand } = charlie
-
-		# Using counts from http://en.wikipedia.org/wiki/Poker_hands.
-
-		it 'should detect the correct number of straight flushes', ->
-			typeCounts[pokerHand.straightFlush].should.equal(40)
-
-		it 'should detect the correct number of 4-of-a-kinds', ->
-			typeCounts[pokerHand.fourKind].should.equal(624)
-
-		it 'should detect the correct number of full houses', ->
-			typeCounts[pokerHand.fullHouse].should.equal(3744)
-
-		it 'should detect the correct number of flushes', ->
-			typeCounts[pokerHand.flush].should.equal(5108)
-
-		it 'should detect the correct number of straights', ->
-			typeCounts[pokerHand.straight].should.equal(10200)
-
-		it 'should detect the correct number of 3-of-a-kinds', ->
-			typeCounts[pokerHand.threeKind].should.equal(54912)
-
-		it 'should detect the correct number of 2 pairs', ->
-			typeCounts[pokerHand.twoPair].should.equal(123552)
-
-		it 'should detect the correct number of pairs', ->
-			typeCounts[pokerHand.pair].should.equal(1098240)
-
-		it 'should detect the correct number of high cards', ->
-			typeCounts[pokerHand.highCard].should.equal(1302540)
-
-		it "shouldn't detect a straight flush with a different straight and a different flush", ->
-			classified = classifyHand('dddsdd', [ 7, 8, 9, 10, 11, 4 ])
 			classified.type.should.equal(pokerHand.flush)
+			classified.vals.should.be.an('array')
+			charlie.sortNum(vals)
+			vals.reverse()
+			vals = vals[...5]
 
-		it "shouldn't detect a straight flush with a different straight and a different flush containing the wheel", ->
-			classified = classifyHand('dddsddc', [ 2, 3, 4, 5, 14, 9, 2 ])
-			classified.type.should.equal(pokerHand.flush)
+			classified.vals.should.eql(vals)
 
-		it "shouldn't detect 3-of-a-kind when there are 2 sets of 3 - this is a full house", ->
-			classified = classifyHand('hdcshd', [ 2, 2, 2, 3, 3, 3 ])
+	it 'should correctly return the full house values', ->
+		for i in [ 0...TEST_COUNT ]
+			cardCount = _.random(5, 7)
+
+			vals = _.sample([ 2...14 ], cardCount)
+			over = vals[2] = vals[1] = vals[0]
+			under = vals[4] = vals[3]
+
+			vals = _.shuffle(vals)
+
+			classified = classifyHand('cshdcsh'[ 0...cardCount ], vals)
 			classified.type.should.equal(pokerHand.fullHouse)
+			classified.vals.should.be.an('array')
+			classified.vals.should.be.length(2)
 
-		it 'should correctly return the high card value', ->
-			for i in [ 0...TEST_COUNT ]
-				vals = _.sample([ 2...14 ], _.random(5, 7))
+			classified.vals.should.eql([ over, under ])
 
-				if charlie.containsStraight(vals)
-					i--
-					continue
+	it 'should correctly return the 4-of-a-kind value', ->
+		for i in [ 0...TEST_COUNT ]
+			cardCount = _.random(5, 7)
 
-				classified = classifyHand('cshdc', vals)
-				classified.type.should.equal(pokerHand.highCard)
-				classified.vals.should.be.an('array')
-				classified.vals.should.be.length(1)
-				classified.vals[0].should.equal(charlie.maxArr(vals))
+			vals = _.sample([ 2...14 ], cardCount)
+			kindVal = vals[0] = vals[1] = vals[2] = vals[3]
+			vals = _.shuffle(vals)
 
-		it 'should correctly return the pair value', ->
-			for i in [ 0...TEST_COUNT ]
-				cardCount = _.random(5, 7)
+			classified = classifyHand('cshdcsh'[ 0...cardCount ], vals)
+			classified.type.should.equal(pokerHand.fourKind)
+			classified.vals.should.be.an('array')
+			classified.vals.should.be.length(1)
 
-				vals = _.sample([ 2...14 ], cardCount)
-				pairVal = vals[1] = vals[0]
+			classified.vals[0].should.equal(kindVal)
 
-				if charlie.containsStraight(vals)
-					i--
-					continue
+	it 'should correctly return the straight flush value', ->
+		for i in [ 0...TEST_COUNT ]
+			straight = _.random(5, 14)
 
-				classified = classifyHand('cshdcsh'[ 0...cardCount ], vals)
-				classified.type.should.equal(pokerHand.pair)
-				classified.vals.should.be.an('array')
-				classified.vals.should.be.length(1)
+			if straight == 5
+				vals = [ 2..5 ].concat(14)
+			else
+				vals = [ straight..straight - 4 ]
 
-				classified.vals[0].should.equal(pairVal)
+			vals = _.shuffle(vals)
 
-		it 'should correctly return the 2-pair values', ->
-			for i in [ 0...TEST_COUNT ]
-				cardCount = _.random(5, 7)
+			suit = _.sample(allSuits)
+			suits = repeat(suit, 5)
 
-				vals = _.sample([ 2...14 ], cardCount)
-				max = vals[1] = vals[0]
-				min = vals[3] = vals[2]
+			classified = classifyHand(suits, vals)
+			classified.type.should.equal(pokerHand.straightFlush)
+			classified.vals.should.be.an('array')
+			classified.vals.should.be.length(1)
 
-				[ min, max ] = [ max, min ] if max < min
+			classified.vals[0].should.equal(straight)
 
-				vals = _.shuffle(vals)
+describe 'containsFlush', ->
+	charlie = new Charlie()
 
-				if charlie.containsStraight(vals)
-					i--
-					continue
+	it 'detects a flush in 5-7 cards', ->
+		for f in allSuits
+			suits = [ f, f, f, f, f ]
 
-				classified = classifyHand('cshdcsh'[ 0...cardCount ], vals)
-				classified.type.should.equal(pokerHand.twoPair)
-				classified.vals.should.be.an('array')
-				classified.vals.should.be.length(2)
+			charlie.containsFlush(suits).should.equal(f)
 
-				classified.vals.should.eql([ max, min ])
+			for o1 in allSuits
+				for o2 in allSuits
+					for i in [0...6]
+						suits.splice(i, 0, o1)
 
-		it 'should correctly return the 3-of-a-kind value', ->
-			for i in [ 0...TEST_COUNT ]
-				cardCount = _.random(5, 7)
+						charlie.containsFlush(suits).should.equal(f)
 
-				vals = _.sample([ 2...14 ], cardCount)
-				kindVal = vals[0] = vals[1] = vals[2]
-				vals = _.shuffle(vals)
+						suits.splice(i, 1)
 
-				if charlie.containsStraight(vals)
-					i--
-					continue
-
-				classified = classifyHand('cshdcsh'[ 0...cardCount ], vals)
-				classified.type.should.equal(pokerHand.threeKind)
-				classified.vals.should.be.an('array')
-				classified.vals.should.be.length(1)
-
-				classified.vals[0].should.equal(kindVal)
-
-		it 'should correctly return the straight value', ->
-			for i in [ 0...TEST_COUNT ]
-				straight = _.random(5, 14)
-
-				if straight == 5
-					vals = [ 2..5 ].concat(14)
-				else
-					vals = [ straight..straight - 4 ]
-
-				vals = _.shuffle(vals)
-
-				classified = classifyHand('cshdc', vals)
-				classified.type.should.equal(pokerHand.straight)
-				classified.vals.should.be.an('array')
-				classified.vals.should.be.length(1)
-
-				classified.vals[0].should.equal(straight)
-
-		it 'should correctly return the flush value', ->
-			for i in [ 0...TEST_COUNT ]
-				cardCount = _.random(5, 7)
-
-				vals = _.sample([ 2...14 ], cardCount)
-
-				if charlie.containsStraight(vals)
-					i--
-					continue
-
-				suit = _.sample(allSuits)
-				suits = repeat(suit, cardCount)
-
-				classified = classifyHand(suits, vals)
-				classified.type.should.equal(pokerHand.flush)
-				classified.vals.should.be.an('array')
-				charlie.sortNum(vals)
-				vals.reverse()
-				vals = vals[...5]
-
-				classified.vals.should.eql(vals)
-
-		it 'should correctly return the full house values', ->
-			for i in [ 0...TEST_COUNT ]
-				cardCount = _.random(5, 7)
-
-				vals = _.sample([ 2...14 ], cardCount)
-				over = vals[2] = vals[1] = vals[0]
-				under = vals[4] = vals[3]
-
-				vals = _.shuffle(vals)
-
-				classified = classifyHand('cshdcsh'[ 0...cardCount ], vals)
-				classified.type.should.equal(pokerHand.fullHouse)
-				classified.vals.should.be.an('array')
-				classified.vals.should.be.length(2)
-
-				classified.vals.should.eql([ over, under ])
-
-		it 'should correctly return the 4-of-a-kind value', ->
-			for i in [ 0...TEST_COUNT ]
-				cardCount = _.random(5, 7)
-
-				vals = _.sample([ 2...14 ], cardCount)
-				kindVal = vals[0] = vals[1] = vals[2] = vals[3]
-				vals = _.shuffle(vals)
-
-				classified = classifyHand('cshdcsh'[ 0...cardCount ], vals)
-				classified.type.should.equal(pokerHand.fourKind)
-				classified.vals.should.be.an('array')
-				classified.vals.should.be.length(1)
-
-				classified.vals[0].should.equal(kindVal)
-
-		it 'should correctly return the straight flush value', ->
-			for i in [ 0...TEST_COUNT ]
-				straight = _.random(5, 14)
-
-				if straight == 5
-					vals = [ 2..5 ].concat(14)
-				else
-					vals = [ straight..straight - 4 ]
-
-				vals = _.shuffle(vals)
-
-				suit = _.sample(allSuits)
-				suits = repeat(suit, 5)
-
-				classified = classifyHand(suits, vals)
-				classified.type.should.equal(pokerHand.straightFlush)
-				classified.vals.should.be.an('array')
-				classified.vals.should.be.length(1)
-
-				classified.vals[0].should.equal(straight)
-
-	describe 'containsFlush', ->
-		charlie = new Charlie()
-
-		it 'detects a flush in 5-7 cards', ->
-			for f in allSuits
-				suits = [ f, f, f, f, f ]
-
-				charlie.containsFlush(suits).should.equal(f)
-
-				for o1 in allSuits
-					for o2 in allSuits
-						for i in [0...6]
-							suits.splice(i, 0, o1)
+						for j in [0...7]
+							suits.splice(j, 0, o2)
 
 							charlie.containsFlush(suits).should.equal(f)
 
-							suits.splice(i, 1)
+							suits.splice(j, 1)
 
-							for j in [0...7]
-								suits.splice(j, 0, o2)
+	it "doesn't detect flushes in 1-4 cards", ->
+		for n in [1..4]
+			for suits in permute(allSuits, n, true)
+				charlie.containsFlush(suits).should.equal(false)
 
-								charlie.containsFlush(suits).should.equal(f)
+	it "doesn't detect flushes in 5-7 cards with < 5 of same suit", ->
+		for n in [5..7]
+			for suits in permute(allSuits, n, true)
+				counts = _.countBy(suits, (s) -> s)
+				continue if n >= 5 for s, n of counts
 
-								suits.splice(j, 1)
+				charlie.containsFlush(suits).should.be.false
 
-		it "doesn't detect flushes in 1-4 cards", ->
-			for n in [1..4]
-				for suits in permute(allSuits, n, true)
-					charlie.containsFlush(suits).should.equal(false)
+describe 'containsNofaKind', ->
+	charlie = new Charlie()
 
-		it "doesn't detect flushes in 5-7 cards with < 5 of same suit", ->
-			for n in [5..7]
-				for suits in permute(allSuits, n, true)
-					counts = _.countBy(suits, (s) -> s)
-					continue if n >= 5 for s, n of counts
+	charlie.containsNofaKind.should.be.a('function')
+	containsNofaKind = charlie.containsNofaKind.bind(charlie)
 
-					charlie.containsFlush(suits).should.be.false
+	it 'should not find any matches when no values duplicated', ->
+		for vals in permute([ 2..14 ], 5)
+			addExtra(vals, true)
+			containsNofaKind(vals).should.be.false
 
-	describe 'containsNofaKind', ->
-		charlie = new Charlie()
+	# Helper function to assert that the containsNofaKind function finds all of the input
+	# array's 'N-of-kinds', e.g. findsNofaKind([ 2, 3 ]) finds all full houses.
+	findsNofaKind = (counts) ->
+		# We only need to permute sum(c - 1 for each c in counts).
+		permuteCount = _.reduce(counts, ((s, c) -> s - c + 1), 5)
 
-		charlie.containsNofaKind.should.be.a('function')
-		containsNofaKind = charlie.containsNofaKind.bind(charlie)
+		for vals in permute([ 2..14 ], permuteCount)
+			addExtra(vals, true)
 
-		it 'should not find any matches when no values duplicated', ->
-			for vals in permute([ 2..14 ], 5)
-				addExtra(vals, true)
-				containsNofaKind(vals).should.be.false
+			pairVals = _.sample(vals, counts.length)
 
-		# Helper function to assert that the containsNofaKind function finds all of the input
-		# array's 'N-of-kinds', e.g. findsNofaKind([ 2, 3 ]) finds all full houses.
-		findsNofaKind = (counts) ->
-			# We only need to permute sum(c - 1 for each c in counts).
-			permuteCount = _.reduce(counts, ((s, c) -> s - c + 1), 5)
+			expected =
+				valToCount: {}
+				countToVals: {}
 
-			for vals in permute([ 2..14 ], permuteCount)
-				addExtra(vals, true)
+			for count, i in counts
+				pairVal = pairVals[i]
+				expected.valToCount[pairVal] = count
 
-				pairVals = _.sample(vals, counts.length)
+				countToVals = expected.countToVals[count]
 
-				expected =
-					valToCount: {}
-					countToVals: {}
+				if !countToVals?
+					expected.countToVals[count] = countToVals = []
 
-				for count, i in counts
-					pairVal = pairVals[i]
-					expected.valToCount[pairVal] = count
+				countToVals.push(pairVal)
 
-					countToVals = expected.countToVals[count]
+				for j in [ 0...count - 1 ]
+					index = _.random(vals.length)
 
-					if !countToVals?
-						expected.countToVals[count] = countToVals = []
+					vals.splice(index, 0, pairVal)
 
-					countToVals.push(pairVal)
+			for count, expectedVals of expected.countToVals
+				charlie.sortNum(expectedVals)
 
-					for j in [ 0...count - 1 ]
-						index = _.random(vals.length)
+			containsNofaKind(vals).should.eql(expected)
 
-						vals.splice(index, 0, pairVal)
+	it 'should find pairs', -> findsNofaKind([ 2 ])
+	it 'should find 2 pairs', -> findsNofaKind([ 2, 2 ])
+	it 'should find 3-of-a-kinds', -> findsNofaKind([ 3 ])
+	it 'should find 4-of-a-kinds', -> findsNofaKind([ 4 ])
+	it 'should find full houses', -> findsNofaKind([ 2, 3 ])
 
-				for count, expectedVals of expected.countToVals
-					charlie.sortNum(expectedVals)
+describe 'containsStraight', ->
+	charlie = new Charlie()
 
-				containsNofaKind(vals).should.eql(expected)
+	charlie.containsStraight.should.be.a('function')
+	containsStraight = charlie.containsStraight.bind(charlie)
 
-		it 'should find pairs', -> findsNofaKind([ 2 ])
-		it 'should find 2 pairs', -> findsNofaKind([ 2, 2 ])
-		it 'should find 3-of-a-kinds', -> findsNofaKind([ 3 ])
-		it 'should find 4-of-a-kinds', -> findsNofaKind([ 4 ])
-		it 'should find full houses', -> findsNofaKind([ 2, 3 ])
+	it 'should not recognise a straight when there are less than 5 cards', ->
+		containsStraight(_.sample([ 2..14 ], n)).should.be.false for n in [1..4]
 
-	describe 'containsStraight', ->
-		charlie = new Charlie()
+	it 'should detect all straights correctly, include the wheel', ->
+		for vals in permute([2..14], 5, true)
+			# Only consider 5% of hands if quick mode is activated.
+			if QUICK and Math.random() > 0.05
+				continue
 
-		charlie.containsStraight.should.be.a('function')
-		containsStraight = charlie.containsStraight.bind(charlie)
+			# Use a counting sort.
+			counts = new Uint8Array(14 + 1)
 
-		it 'should not recognise a straight when there are less than 5 cards', ->
-			containsStraight(_.sample([ 2..14 ], n)).should.be.false for n in [1..4]
+			addExtra(vals)
 
-		it 'should detect all straights correctly, include the wheel', ->
-			for vals in permute([2..14], 5, true)
-				# Only consider 5% of hands if quick mode is activated.
-				if QUICK and Math.random() > 0.05
-					continue
+			invalid = false
+			for val in vals
+				n = ++counts[val]
+				invalid = true if n > 4
 
-				# Use a counting sort.
-				counts = new Uint8Array(14 + 1)
+			# Ignore invalid hands.
+			continue if invalid
 
-				addExtra(vals)
+			straight = false
+			max = -1
 
-				invalid = false
-				for val in vals
-					n = ++counts[val]
-					invalid = true if n > 4
-
-				# Ignore invalid hands.
-				continue if invalid
-
-				straight = false
-				max = -1
-
-				streak = 0
-				for count, val in counts
-					if count == 0
-						streak = 0
-					else
-						streak++
-						max = val if val > max
-
-					isWheel = val == 5 and streak == 4 and counts[14] > 0
-					if streak == 5 or isWheel
-						straight = true
-						break
-
-				if straight
-					containsStraight(vals).should.equal(max)
+			streak = 0
+			for count, val in counts
+				if count == 0
+					streak = 0
 				else
-					containsStraight(vals).should.be.false
+					streak++
+					max = val if val > max
 
-	describe 'inRange', ->
+				isWheel = val == 5 and streak == 4 and counts[14] > 0
+				if streak == 5 or isWheel
+					straight = true
+					break
+
+			if straight
+				containsStraight(vals).should.equal(max)
+			else
+				containsStraight(vals).should.be.false
+
+describe 'inRange', ->
+	charlie = new Charlie()
+	charlie.inRange.should.be.a('function')
+	inRange = charlie.inRange.bind(charlie)
+
+	it 'detects correct ranges for each possible face combination + suited/unsuited', ->
+		_.each allFaces, (face1, i) ->
+			_.each allFaces[i...], (face2) ->
+				range = "#{face1}#{face2}"
+				rangePair = range[0] == range[1]
+				_.each allHands, (hand) ->
+					# Only consider 5% of hands if quick mode is activated.
+					return if QUICK and Math.random() > 0.05
+
+					setCharlie(charlie, hand)
+					{ faces, pair, suits } = charlie.state
+
+					actualVal1 = charlie.handVals[faces[0]]
+					expectedVal1 = charlie.handVals[face1]
+
+					actualVal2 = charlie.handVals[faces[1]]
+					expectedVal2 = charlie.handVals[face2]
+
+					expected =
+						if rangePair
+							pair and actualVal1 >= expectedVal1
+						else
+							actualVal1 >= expectedVal1 and actualVal2 >= expectedVal2
+
+					inRange(range).should.equal(expected)
+					# Test with the '+' suffix as well. This should make no difference.
+					inRange(range + '+').should.equal(expected)
+
+					# Test suited ranges - if a pair can't be suited.
+					if !rangePair
+						# TODO: Bring suited into Charlie.
+						suited = suits[0] == suits[1]
+						expectedSuited = expected and !pair and suited
+
+						inRange(range + 's').should.equal(expectedSuited)
+
+describe 'getBigBlind', ->
+	it 'should return the biggest blind any player possesses.', ->
+		players = [
+			blind: 50
+		,
+			blind: 0
+		,
+			blind: -10
+		,
+			blind: 15
+		,
+			blind: 35
+		]
+
+		Charlie::getBigBlind(players).should.equal(50)
+
+describe 'preflopBet', ->
+	it 'goes all-in with a monster hand', ->
 		charlie = new Charlie()
-		charlie.inRange.should.be.a('function')
-		inRange = charlie.inRange.bind(charlie)
+		charlie.state.chips = 100
+		charlie.state.monster = true
 
-		it 'detects correct ranges for each possible face combination + suited/unsuited', ->
-			_.each allFaces, (face1, i) ->
-				_.each allFaces[i...], (face2) ->
-					range = "#{face1}#{face2}"
-					rangePair = range[0] == range[1]
-					_.each allHands, (hand) ->
-						# Only consider 5% of hands if quick mode is activated.
-						return if QUICK and Math.random() > 0.05
+		# Playability should make no difference.
+		charlie.state.playable = true
+		charlie.preflopBet().should.equal(100)
+		charlie.state.playable = false
+		charlie.preflopBet().should.equal(100)
 
-						setCharlie(charlie, hand)
-						{ faces, pair, suits } = charlie.state
+	it 'plays 8*minimum raise with a playable hand and first betting round', ->
+		charlie = new Charlie()
 
-						actualVal1 = charlie.handVals[faces[0]]
-						expectedVal1 = charlie.handVals[face1]
+		charlie.state.bettingRound = 1
 
-						actualVal2 = charlie.handVals[faces[1]]
-						expectedVal2 = charlie.handVals[face2]
+		charlie.state.betting = raise: 15
+		charlie.state.playable = true
 
-						expected =
-							if rangePair
-								pair and actualVal1 >= expectedVal1
-							else
-								actualVal1 >= expectedVal1 and actualVal2 >= expectedVal2
+		charlie.preflopBet().should.equal(8 * 15)
 
-						inRange(range).should.equal(expected)
-						# Test with the '+' suffix as well. This should make no difference.
-						inRange(range + '+').should.equal(expected)
+	it 'calls with a playable hand after first betting round', ->
+		charlie = new Charlie()
 
-						# Test suited ranges - if a pair can't be suited.
-						if !rangePair
-							# TODO: Bring suited into Charlie.
-							suited = suits[0] == suits[1]
-							expectedSuited = expected and !pair and suited
+		charlie.state.bettingRound = 2
 
-							inRange(range + 's').should.equal(expectedSuited)
+		charlie.state.betting = call: 17
+		charlie.state.playable = true
 
-	describe 'getBigBlind', ->
-		it 'should return the biggest blind any player possesses.', ->
-			players = [
-				blind: 50
-			,
-				blind: 0
-			,
-				blind: -10
-			,
-				blind: 15
-			,
-				blind: 35
-			]
+		charlie.preflopBet().should.equal(17)
 
-			Charlie::getBigBlind(players).should.equal(50)
+	it 'check/folds if neither playable nor monster', ->
+		charlie = new Charlie()
+		charlie.preflopBet().should.equal(charlie.specialBet.checkFold)
 
-	describe 'preflopBet', ->
-		it 'goes all-in with a monster hand', ->
-			charlie = new Charlie()
-			charlie.state.chips = 100
-			charlie.state.monster = true
+describe 'postflopBet', ->
+	it 'plays 8*minimum raise if hand is playable and first betting round', ->
+		charlie = new Charlie()
+		charlie.state.betting = raise: 7
 
-			# Playability should make no difference.
-			charlie.state.playable = true
-			charlie.preflopBet().should.equal(100)
-			charlie.state.playable = false
-			charlie.preflopBet().should.equal(100)
+		charlie.state.bettingRound = 1
+		charlie.state.playable = true
 
-		it 'plays 8*minimum raise with a playable hand and first betting round', ->
-			charlie = new Charlie()
+		charlie.postflopBet().should.equal(8 * 7)
 
-			charlie.state.bettingRound = 1
+	it 'calls with a playable hand after first betting round', ->
+		charlie = new Charlie()
 
-			charlie.state.betting = raise: 15
-			charlie.state.playable = true
+		charlie.state.bettingRound = 2
 
-			charlie.preflopBet().should.equal(8 * 15)
+		charlie.state.betting = call: 17
+		charlie.state.playable = true
 
-		it 'calls with a playable hand after first betting round', ->
-			charlie = new Charlie()
+		charlie.postflopBet().should.equal(17)
 
-			charlie.state.bettingRound = 2
+	it 'goes all-in if the hand is playable and a monster', ->
+		charlie = new Charlie()
+		charlie.state.chips = 12345
+		charlie.state.bettingRound = 1
+		charlie.state.monster = true
+		charlie.state.playable = true
 
-			charlie.state.betting = call: 17
-			charlie.state.playable = true
+		charlie.postflopBet().should.equal(12345)
 
-			charlie.preflopBet().should.equal(17)
+	it 'check/folds if not playable', ->
+		charlie = new Charlie()
+		charlie.state.bb = 7
 
-		it 'check/folds if neither playable nor monster', ->
-			charlie = new Charlie()
-			charlie.preflopBet().should.equal(charlie.specialBet.checkFold)
+		charlie.state.playable = false
+		charlie.postflopBet().should.equal(charlie.specialBet.checkFold)
 
-	describe 'postflopBet', ->
-		it 'plays 8*minimum raise if hand is playable and first betting round', ->
-			charlie = new Charlie()
-			charlie.state.betting = raise: 7
+describe 'sortNum', ->
+	ns = [ 10, 3, 1, 100, 11 ]
+	sorted = [ 1, 3, 10, 11, 100 ]
 
-			charlie.state.bettingRound = 1
-			charlie.state.playable = true
-
-			charlie.postflopBet().should.equal(8 * 7)
-
-		it 'calls with a playable hand after first betting round', ->
-			charlie = new Charlie()
-
-			charlie.state.bettingRound = 2
-
-			charlie.state.betting = call: 17
-			charlie.state.playable = true
-
-			charlie.postflopBet().should.equal(17)
-
-		it 'goes all-in if the hand is playable and a monster', ->
-			charlie = new Charlie()
-			charlie.state.chips = 12345
-			charlie.state.bettingRound = 1
-			charlie.state.monster = true
-			charlie.state.playable = true
-
-			charlie.postflopBet().should.equal(12345)
-
-		it 'check/folds if not playable', ->
-			charlie = new Charlie()
-			charlie.state.bb = 7
-
-			charlie.state.playable = false
-			charlie.postflopBet().should.equal(charlie.specialBet.checkFold)
-
-	describe 'sortNum', ->
-		ns = [ 10, 3, 1, 100, 11 ]
-		sorted = [ 1, 3, 10, 11, 100 ]
-
-		it 'sorts an array numerically', ->
-			Charlie::sortNum(ns).should.eql(sorted)
+	it 'sorts an array numerically', ->
+		Charlie::sortNum(ns).should.eql(sorted)
